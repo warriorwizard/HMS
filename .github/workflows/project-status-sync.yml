@@ -30,7 +30,7 @@ jobs:
           PROJECT_OWNER: ${{ vars.PROJECT_OWNER }}
           PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
         with:
-          github-token: ${{ secrets.PROJECT_AUTOMATION_TOKEN != '' && secrets.PROJECT_AUTOMATION_TOKEN || github.token }}
+          github-token: ${{ secrets.PROJECT_AUTOMATION_TOKEN || github.token }}
           script: |
             const owner = process.env.PROJECT_OWNER || context.repo.owner;
             const repo = context.repo.repo;
