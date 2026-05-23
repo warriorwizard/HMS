@@ -12,6 +12,9 @@ export {
 } from "./b2b";
 export { fetchCrmCampaigns, fetchCrmLeads, fetchCrmReminders } from "./crm";
 export { fetchReportProcessingJobs, fetchReports } from "./reports";
+export { fetchLimsSamples } from "./lims";
+export { fetchPacsStudies, fetchPacsStudy } from "./pacs";
+export { fetchRisOrders } from "./ris";
 export { fetchDoctorReviewQueue, fetchTechnicianQueue, fetchWorkflowTasks } from "./workflow";
 export {
   fetchBillingInvoices,
@@ -65,11 +68,24 @@ export type {
   CrmRemindersQuery
 } from "./crm";
 export type {
+  LimsPaginatedResponse,
+  LimsPagination,
+  LimsSampleResource
+} from "./lims";
+export type {
+  PacsImageResource,
+  PacsPaginatedResponse,
+  PacsPagination,
+  PacsSeriesResource,
+  PacsStudyResource
+} from "./pacs";
+export type {
   ProcessingJobResource,
   ReportResource,
   ReportsPaginatedResponse,
   ReportsPagination
 } from "./reports";
+export type { RisOrderResource, RisPaginatedResponse, RisPagination } from "./ris";
 export type {
   PatientPaginatedResponse,
   PatientPagination,
