@@ -600,6 +600,69 @@ input[type="search"] {
   height: 100%;
 }
 
+.crm-funnel,
+.crm-health-list {
+  display: grid;
+  gap: 10px;
+}
+
+.crm-funnel-row,
+.crm-health-row {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+}
+
+.crm-funnel-row {
+  grid-template-columns: minmax(150px, 1fr) minmax(120px, 1.4fr) minmax(110px, 0.8fr);
+}
+
+.crm-health-row {
+  grid-template-columns: minmax(170px, 1fr) 120px 100px minmax(220px, 1.4fr);
+}
+
+.crm-health-row div,
+.crm-funnel-meta,
+.crm-funnel-stats {
+  display: grid;
+  gap: 4px;
+}
+
+.crm-funnel-meta span,
+.crm-funnel-stats small,
+.crm-health-row small,
+.crm-health-row > span {
+  color: var(--muted);
+}
+
+.crm-funnel-track {
+  background: #e8efeb;
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.crm-funnel-fill {
+  background: linear-gradient(90deg, var(--blue), var(--teal));
+  border-radius: inherit;
+  height: 100%;
+}
+
+.crm-health-head {
+  background: #f0f6f3;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.crm-health-head span {
+  color: inherit;
+}
+
 .admin-config-grid {
   display: grid;
   gap: 16px;
@@ -687,7 +750,9 @@ input[type="search"] {
 
   .queue-row,
   .table-row,
-  .reports-table .table-row {
+  .reports-table .table-row,
+  .crm-funnel-row,
+  .crm-health-row {
     grid-template-columns: 1fr;
   }
 }
@@ -716,6 +781,10 @@ input[type="search"] {
   .bar-row,
   .key-value-list div {
     grid-template-columns: 1fr;
+  }
+
+  .crm-health-head {
+    display: none;
   }
 }
 

@@ -3,6 +3,7 @@ export type { ApiClient } from "./client";
 export { getApiBaseUrl, joinApiUrl } from "./config";
 export { ApiError, isApiError, normalizeApiError } from "./errors";
 export { fetchAdminMemberships, fetchAdminTenants } from "./admin";
+export { fetchCrmCampaigns, fetchCrmLeads, fetchCrmReminders } from "./crm";
 export { fetchHealth, fetchSystemInfo } from "./system";
 export type {
   AdminMembershipResource,
@@ -15,6 +16,16 @@ export type {
   AdminTenantResource,
   AdminTenantsQuery
 } from "./admin";
+export type {
+  CrmCampaignResource,
+  CrmCampaignsQuery,
+  CrmLeadResource,
+  CrmLeadsQuery,
+  CrmPaginatedResponse,
+  CrmPagination,
+  CrmReminderResource,
+  CrmRemindersQuery
+} from "./crm";
 export type { HealthResource, SystemInfoResource } from "./system";
 export type { ApiErrorCode } from "./errors";
 export type {

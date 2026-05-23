@@ -40,3 +40,7 @@ http://localhost:3000
   - `/admin/users`
   - `/admin/operations`
   - `/admin/configuration`
+- CRM surfaces:
+  - `/crm`
+  - `/crm/campaigns`
+  - `/crm/dashboard`
