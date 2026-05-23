@@ -25,10 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate project automation token
-        if: ${{ secrets.PROJECT_AUTOMATION_TOKEN == '' }}
+        env:
+          PROJECT_AUTOMATION_TOKEN: ${{ secrets.PROJECT_AUTOMATION_TOKEN }}
         run: |
-          echo "::error::Missing secret PROJECT_AUTOMATION_TOKEN. For user projects, create a PAT (classic) with 'project' + 'repo' scopes and save it as this secret."
-          exit 1
+          if [ -z "$PROJECT_AUTOMATION_TOKEN" ]; then
+            echo "::error::Missing secret PROJECT_AUTOMATION_TOKEN. For user projects, create a PAT (classic) with 'project' + 'repo' scopes and save it as this secret."
+            exit 1
+          fi
 
       - name: Sync issue(s) to Project status
         uses: actions/github-script@v7
