@@ -32,3 +32,8 @@ GET http://127.0.0.1:8000/api/v1/health
 - Health and system info routes in `app/api/routes/health.py`.
 - Environment-backed settings in `app/core/config.py`.
 - Request ID middleware in `app/core/middleware.py`.
+
+## SQLAlchemy Model Conventions
+- Shared SQLAlchemy naming conventions and timestamp helpers are centralized in `app/db/conventions.py` and wired through `app/db/base.py` metadata.
+- Existing migration history remains compatible: previously generated revisions (for example `migrations/versions/0001_identity_foundation.py`) are not rewritten, and constraint/index names that were already explicit continue to apply unchanged.
+- For future schema changes, generate new Alembic revisions normally so any new unnamed constraints/indexes inherit the shared naming convention.
