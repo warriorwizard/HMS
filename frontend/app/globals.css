@@ -435,6 +435,10 @@ input[type="search"] {
   gap: 8px;
 }
 
+.ops-performance-table .table-row {
+  grid-template-columns: minmax(170px, 1.1fr) 105px 110px minmax(210px, 1.2fr) 96px;
+}
+
 .table-row {
   align-items: center;
   border: 1px solid var(--line);
@@ -482,6 +486,11 @@ input[type="search"] {
   gap: 12px;
 }
 
+.admin-stack {
+  display: grid;
+  gap: 10px;
+}
+
 .timeline div,
 .signal-list div,
 .settings-list div,
@@ -496,6 +505,19 @@ input[type="search"] {
 .settings-list div {
   align-items: center;
   grid-template-columns: auto 1fr;
+}
+
+.admin-status-row {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.admin-status-row div {
+  display: grid;
+  gap: 4px;
 }
 
 .key-value-list div {
@@ -578,6 +600,67 @@ input[type="search"] {
   height: 100%;
 }
 
+.admin-config-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.config-description {
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+
+.config-row {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fcfefd;
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+}
+
+.config-row-heading {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.config-edit {
+  display: grid;
+  gap: 6px;
+}
+
+.config-edit span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.config-input {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  min-height: 40px;
+  padding: 9px 10px;
+}
+
+.config-row small,
+.admin-status-row > span,
+.admin-status-row small {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.config-row .action-bar {
+  margin-top: 0;
+}
+
 @media (max-width: 920px) {
   .workspace {
     grid-template-columns: 1fr;
@@ -597,7 +680,8 @@ input[type="search"] {
   .wide-grid,
   .split-grid,
   .settings-grid,
-  .workflow-board {
+  .workflow-board,
+  .admin-config-grid {
     grid-template-columns: 1fr;
   }
 

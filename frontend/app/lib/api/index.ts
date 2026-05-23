@@ -2,7 +2,19 @@ export { createApiClient, apiClient } from "./client";
 export type { ApiClient } from "./client";
 export { getApiBaseUrl, joinApiUrl } from "./config";
 export { ApiError, isApiError, normalizeApiError } from "./errors";
+export { fetchAdminMemberships, fetchAdminTenants } from "./admin";
 export { fetchHealth, fetchSystemInfo } from "./system";
+export type {
+  AdminMembershipResource,
+  AdminMembershipRoleSummary,
+  AdminMembershipTenantSummary,
+  AdminMembershipUserSummary,
+  AdminMembershipsQuery,
+  AdminPaginatedResponse,
+  AdminPagination,
+  AdminTenantResource,
+  AdminTenantsQuery
+} from "./admin";
 export type { HealthResource, SystemInfoResource } from "./system";
 export type { ApiErrorCode } from "./errors";
 export type {
