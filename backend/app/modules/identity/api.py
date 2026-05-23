@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db_session
+from app.modules.audit.service import write_audit_log
 from app.modules.identity.dependencies import get_current_identity
 from app.modules.identity.schemas import (
     AuthTokenResponse,
@@ -40,7 +41,14 @@ def login(payload: LoginRequest, db: Session = Depends(get_db_session)) -> AuthT
             detail="Invalid email or password",
         )
 
-    _, access_token, refresh_token = create_user_session(db, user)
+    user_session, access_token, refresh_token = create_user_session(db, user)
+    write_audit_log(
+        db,
+        action="auth.login",
+        resource_type="auth",
+        actor_id=user.id,
+        resource_id=user_session.id,
+    )
     db.commit()
 
     return AuthTokenResponse(
@@ -89,6 +97,15 @@ def select_tenant(
             detail="Invalid refresh token",
         ) from exc
 
+    write_audit_log(
+        db,
+        action="auth.tenant_selected",
+        resource_type="tenant",
+        tenant_id=membership.tenant_id,
+        actor_id=membership.user_id,
+        actor_role=membership.role.key,
+        resource_id=membership.tenant_id,
+    )
     db.commit()
     return TenantSelectionResponse(
         access_token=access_token,
