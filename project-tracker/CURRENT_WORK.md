@@ -46,6 +46,9 @@ Prepare the workspace for first GitHub commit and push to `git@github.com:warrio
 - 2026-05-23: Completed `TAR-P1-004` with tenant selection API and token refresh preserving selected tenant context.
 - 2026-05-23: Completed `TAR-P1-005` with current-identity dependency helpers and permission guard support.
 - 2026-05-23: Added missing architecture deep-review tasks from foundation, identity, patient, reports, memory, twin, AI agents, risk, command center, copilot, workflow, billing, and analytics.
+- 2026-05-23: Initialized git repository in `lims`, committed project baseline, and pushed `main` to `git@github.com:warriorwizard/HMS.git`.
+- 2026-05-23: Enabled Codex GitHub workflow by installing `github@openai-curated` plugin and validating authenticated access.
+- 2026-05-23: Seeded execution issues `#1` to `#10` in `warriorwizard/HMS` from the local tracker.
 
 ## Working Notes
 - No external Jira/Linear board is currently connected in this environment.
