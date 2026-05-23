@@ -35,32 +35,51 @@ jobs:
             const owner = process.env.PROJECT_OWNER || context.repo.owner;
             const repo = context.repo.repo;
             const configuredProjectNumber = process.env.PROJECT_NUMBER ? Number(process.env.PROJECT_NUMBER) : null;
+            let ownerType = null;
 
             const normalize = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
             const hasLabel = (labels, target) => labels.some((label) => normalize(label) === normalize(target));
 
+            async function resolveOwnerType() {
+              const lookup = await github.rest.users.getByUsername({ username: owner });
+              ownerType = lookup.data?.type;
+              if (ownerType !== "User" && ownerType !== "Organization") {
+                throw new Error(`Unsupported owner type '${ownerType}' for '${owner}'.`);
+              }
+              core.info(`Resolved project owner '${owner}' as ${ownerType}.`);
+            }
+
             async function getProjectByNumber(projectNumber) {
-              const query = `
-                query($owner: String!, $number: Int!) {
-                  organization(login: $owner) {
-                    projectV2(number: $number) {
-                      id
-                      number
-                      title
-                      fields(first: 50) {
-                        nodes {
-                          ... on ProjectV2SingleSelectField {
-                            id
-                            name
-                            options {
+              if (ownerType === "Organization") {
+                const query = `
+                  query($owner: String!, $number: Int!) {
+                    organization(login: $owner) {
+                      projectV2(number: $number) {
+                        id
+                        number
+                        title
+                        fields(first: 50) {
+                          nodes {
+                            ... on ProjectV2SingleSelectField {
                               id
                               name
+                              options {
+                                id
+                                name
+                              }
                             }
                           }
                         }
                       }
                     }
                   }
+                `;
+                const result = await github.graphql(query, { owner, number: projectNumber });
+                return result.organization?.projectV2 || null;
+              }
+
+              const query = `
+                query($owner: String!, $number: Int!) {
                   user(login: $owner) {
                     projectV2(number: $number) {
                       id
@@ -82,9 +101,8 @@ jobs:
                   }
                 }
               `;
-
               const result = await github.graphql(query, { owner, number: projectNumber });
-              return result.organization?.projectV2 || result.user?.projectV2 || null;
+              return result.user?.projectV2 || null;
             }
 
             async function discoverProject() {
@@ -96,22 +114,25 @@ jobs:
                 return project;
               }
 
-              const query = `
-                query($owner: String!) {
-                  organization(login: $owner) {
-                    projectsV2(first: 20, orderBy: { field: UPDATED_AT, direction: DESC }) {
-                      nodes {
-                        id
-                        number
-                        title
-                        fields(first: 50) {
-                          nodes {
-                            ... on ProjectV2SingleSelectField {
-                              id
-                              name
-                              options {
+              let projects = [];
+              if (ownerType === "Organization") {
+                const query = `
+                  query($owner: String!) {
+                    organization(login: $owner) {
+                      projectsV2(first: 20, orderBy: { field: UPDATED_AT, direction: DESC }) {
+                        nodes {
+                          id
+                          number
+                          title
+                          fields(first: 50) {
+                            nodes {
+                              ... on ProjectV2SingleSelectField {
                                 id
                                 name
+                                options {
+                                  id
+                                  name
+                                }
                               }
                             }
                           }
@@ -119,20 +140,27 @@ jobs:
                       }
                     }
                   }
-                  user(login: $owner) {
-                    projectsV2(first: 20, orderBy: { field: UPDATED_AT, direction: DESC }) {
-                      nodes {
-                        id
-                        number
-                        title
-                        fields(first: 50) {
-                          nodes {
-                            ... on ProjectV2SingleSelectField {
-                              id
-                              name
-                              options {
+                `;
+                const result = await github.graphql(query, { owner });
+                projects = result.organization?.projectsV2?.nodes || [];
+              } else {
+                const query = `
+                  query($owner: String!) {
+                    user(login: $owner) {
+                      projectsV2(first: 20, orderBy: { field: UPDATED_AT, direction: DESC }) {
+                        nodes {
+                          id
+                          number
+                          title
+                          fields(first: 50) {
+                            nodes {
+                              ... on ProjectV2SingleSelectField {
                                 id
                                 name
+                                options {
+                                  id
+                                  name
+                                }
                               }
                             }
                           }
@@ -140,13 +168,10 @@ jobs:
                       }
                     }
                   }
-                }
-              `;
-
-              const result = await github.graphql(query, { owner });
-              const orgProjects = result.organization?.projectsV2?.nodes || [];
-              const userProjects = result.user?.projectsV2?.nodes || [];
-              const projects = [...orgProjects, ...userProjects];
+                `;
+                const result = await github.graphql(query, { owner });
+                projects = result.user?.projectsV2?.nodes || [];
+              }
 
               if (projects.length === 0) {
                 throw new Error(
@@ -310,6 +335,7 @@ jobs:
               return allIssues.filter((issue) => !issue.pull_request);
             }
 
+            await resolveOwnerType();
             const project = await discoverProject();
             const statusField = (project.fields?.nodes || []).find(
               (field) => normalize(field.name) === "status" && Array.isArray(field.options)
