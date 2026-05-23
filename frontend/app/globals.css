@@ -324,6 +324,78 @@ input[type="search"] {
   margin-top: 18px;
 }
 
+.state-block {
+  border: 1px dashed #c4d8ce;
+  border-radius: 8px;
+  background: #f8fcfa;
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  padding: 18px;
+}
+
+.state-block h3,
+.state-block p {
+  margin: 0;
+}
+
+.state-block p {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.state-block .action-bar {
+  margin-top: 6px;
+}
+
+.state-block.loading {
+  background: #f5fafc;
+  border-color: #bfd7df;
+}
+
+.state-block.error {
+  background: #fff6f5;
+  border-color: #efc4bf;
+}
+
+.state-block.error h3 {
+  color: var(--red);
+}
+
+.state-spinner {
+  border: 2px solid #bfd7df;
+  border-radius: 999px;
+  border-top-color: var(--teal);
+  height: 18px;
+  width: 18px;
+  animation: state-spin 0.9s linear infinite;
+}
+
+.field-hint {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 6px 0 0;
+}
+
+.field-hint.good {
+  color: var(--green);
+}
+
+.field-hint.warning {
+  color: var(--amber);
+}
+
+.field-hint.danger {
+  color: var(--red);
+}
+
+@keyframes state-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .pipeline {
   display: grid;
   gap: 10px;
@@ -560,5 +632,11 @@ input[type="search"] {
   .bar-row,
   .key-value-list div {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .state-spinner {
+    animation-duration: 1.8s;
   }
 }
