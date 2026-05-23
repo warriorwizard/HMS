@@ -1,3 +1,7 @@
+import { type NavItem } from "@/app/lib/permissions";
+
+export type { NavItem };
+
 export type RiskLevel = "Critical" | "High" | "Moderate" | "Low";
 
 export type Metric = {
@@ -72,23 +76,24 @@ export type B2BAgingBucket = {
   note: string;
 };
 
-export const navItems = [
-  { label: "Command", href: "/doctor/command-center" },
-  { label: "Patients", href: "/patients" },
-  { label: "Reports", href: "/reports" },
-  { label: "Workflow", href: "/workflow" },
-  { label: "Analytics", href: "/analytics" },
-  { label: "CRM", href: "/crm" },
-  { label: "Campaigns", href: "/crm/campaigns" },
-  { label: "CRM Dashboard", href: "/crm/dashboard" },
-  { label: "B2B Partners", href: "/b2b/partners" },
-  { label: "B2B Orders", href: "/b2b/orders" },
-  { label: "B2B Billing", href: "/b2b/billing" },
-  { label: "Tenants", href: "/admin/tenants" },
-  { label: "User Roles", href: "/admin/users" },
-  { label: "Admin Ops", href: "/admin/operations" },
-  { label: "Configuration", href: "/admin/configuration" },
-  { label: "Settings", href: "/settings" }
+export const navItems: NavItem[] = [
+  { label: "Command",       href: "/doctor/command-center", requiredPermission: "patients:read" },
+  { label: "Patients",      href: "/patients",              requiredPermission: "patients:read" },
+  { label: "Reports",       href: "/reports",               requiredPermission: "reports:read" },
+  { label: "Workflow",      href: "/workflow",              requiredPermission: "workflow:read" },
+  { label: "Analytics",     href: "/analytics",             requiredPermission: "analytics:read" },
+  { label: "Notifications", href: "/notifications" },
+  { label: "CRM",           href: "/crm",                   requiredPermission: "patients:read" },
+  { label: "Campaigns",     href: "/crm/campaigns",         requiredPermission: "patients:read" },
+  { label: "CRM Dashboard", href: "/crm/dashboard",         requiredPermission: "analytics:read" },
+  { label: "B2B Partners",  href: "/b2b/partners",          requiredPermission: "billing:read" },
+  { label: "B2B Orders",    href: "/b2b/orders",            requiredPermission: "billing:read" },
+  { label: "B2B Billing",   href: "/b2b/billing",           requiredPermission: "billing:read" },
+  { label: "Tenants",       href: "/admin/tenants",         requiredPermission: "admin:read" },
+  { label: "User Roles",    href: "/admin/users",           requiredPermission: "admin:read" },
+  { label: "Admin Ops",     href: "/admin/operations",      requiredPermission: "admin:read" },
+  { label: "Configuration", href: "/admin/configuration",   requiredPermission: "admin:read" },
+  { label: "Settings",      href: "/settings" },
 ];
 
 export const commandMetrics: Metric[] = [

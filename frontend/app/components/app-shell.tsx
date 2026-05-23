@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { filterNavByPermissions } from "@/app/lib/permissions";
 import { navItems } from "@/app/lib/workspace-data";
 
 type AppShellProps = {
@@ -9,6 +10,8 @@ type AppShellProps = {
   title: string;
   children: ReactNode;
   rightSlot?: ReactNode;
+  /** Permission keys for the current user. When omitted, all nav items are shown. */
+  permissions?: readonly string[];
 };
 
 export function AppShell({
@@ -16,8 +19,11 @@ export function AppShell({
   eyebrow,
   title,
   children,
-  rightSlot
+  rightSlot,
+  permissions,
 }: AppShellProps) {
+  const visibleNav = permissions ? filterNavByPermissions(navItems, permissions) : navItems;
+
   return (
     <main className="workspace">
       <aside className="sidebar">
@@ -26,7 +32,7 @@ export function AppShell({
           <h1>Clinical Operations</h1>
         </div>
         <nav aria-label="Primary navigation" className="primary-nav">
-          {navItems.map((item) => {
+          {visibleNav.map((item) => {
             const isActive = activePath === item.href;
 
             return (
