@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from app.api.router import api_router
 from app.core.config import settings
+from app.core.exception_handlers import register_exception_handlers
 from app.core.logging import configure_logging
 from app.core.middleware import RequestContextMiddleware
 
@@ -16,6 +17,7 @@ def create_app() -> FastAPI:
         redoc_url="/redoc" if settings.enable_docs else None,
         openapi_url="/openapi.json" if settings.enable_docs else None,
     )
+    register_exception_handlers(app)
     app.add_middleware(RequestContextMiddleware)
     app.include_router(api_router, prefix=settings.api_prefix)
 
