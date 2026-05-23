@@ -8,9 +8,15 @@ from app.modules.notifications.schemas import (
     CreateNotificationRequest,
     NotificationItem,
     NotificationsResponse,
+    PatientShareDispatchRequest,
+    PatientShareDispatchResponse,
+    PatientShareOtpRequest,
+    PatientShareOtpResponse,
 )
 from app.modules.notifications.service import (
+    create_patient_share_otp,
     create_notification,
+    dispatch_patient_share,
     list_notifications,
     mark_notification_read,
 )
@@ -68,3 +74,25 @@ def patch_notification_read(
     if notification is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Notification not found")
     return notification
+
+
+@router.post("/patient-share/otp", response_model=PatientShareOtpResponse)
+def post_patient_share_otp(
+    payload: PatientShareOtpRequest,
+    _: AuthenticatedIdentity = Depends(get_current_identity),
+) -> PatientShareOtpResponse:
+    try:
+        return create_patient_share_otp(payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
+@router.post("/patient-share/dispatch", response_model=PatientShareDispatchResponse)
+def post_patient_share_dispatch(
+    payload: PatientShareDispatchRequest,
+    _: AuthenticatedIdentity = Depends(get_current_identity),
+) -> PatientShareDispatchResponse:
+    try:
+        return dispatch_patient_share(payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc

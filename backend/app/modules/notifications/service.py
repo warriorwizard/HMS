@@ -1,11 +1,19 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from dataclasses import dataclass
 from threading import Lock
 from typing import TypeVar
 
 from app.api.pagination import PaginationParams
-from app.modules.notifications.schemas import CreateNotificationRequest, NotificationItem
+from app.modules.notifications.schemas import (
+    CreateNotificationRequest,
+    NotificationItem,
+    PatientShareDispatchRequest,
+    PatientShareDispatchResponse,
+    PatientShareOtpRequest,
+    PatientShareOtpResponse,
+)
 
 T = TypeVar("T")
 
@@ -60,6 +68,41 @@ _notifications_lock = Lock()
 _notifications_store: list[NotificationItem] = list(_BASE_NOTIFICATIONS)
 
 
+@dataclass(frozen=True)
+class PendingPatientShare:
+    share_id: str
+    patient_id: str
+    recipient: str
+    channel: str
+    otp_code: str
+    expires_at: str
+    consumed: bool = False
+
+
+_share_lock = Lock()
+_patient_share_store: dict[str, PendingPatientShare] = {}
+
+
+class NotificationProviderAdapter:
+    provider_name = "mock-provider"
+
+    def send(self, *, channel: str, recipient: str, message: str) -> dict[str, str]:
+        if channel not in {"sms", "email"}:
+            raise ValueError("Unsupported notification channel")
+        if not recipient:
+            raise ValueError("Recipient is required")
+        if not message:
+            raise ValueError("Message is required")
+        return {
+            "provider": self.provider_name,
+            "status": "sent",
+            "sent_at": "2026-05-23T00:20:00Z",
+        }
+
+
+_provider_adapter = NotificationProviderAdapter()
+
+
 def _normalize_tokens(values: Sequence[str]) -> tuple[str, ...]:
     normalized: list[str] = []
     seen: set[str] = set()
@@ -96,10 +139,24 @@ def _next_notification_id(items: Sequence[NotificationItem]) -> str:
     return f"ntf_{max_identifier + 1:03d}"
 
 
+def _next_share_id() -> str:
+    with _share_lock:
+        max_identifier = 0
+        for share_id in _patient_share_store:
+            if not share_id.startswith("shr_"):
+                continue
+            suffix = share_id.split("_", 1)[1]
+            if suffix.isdigit():
+                max_identifier = max(max_identifier, int(suffix))
+        return f"shr_{max_identifier + 1:03d}"
+
+
 def reset_notifications_store() -> None:
     global _notifications_store
     with _notifications_lock:
         _notifications_store = list(_BASE_NOTIFICATIONS)
+    with _share_lock:
+        _patient_share_store.clear()
 
 
 def list_notifications(
@@ -156,3 +213,62 @@ def mark_notification_read(notification_id: str) -> NotificationItem | None:
             _notifications_store[index] = updated
             return updated
     return None
+
+
+def create_patient_share_otp(payload: PatientShareOtpRequest) -> PatientShareOtpResponse:
+    if payload.channel not in {"sms", "email"}:
+        raise ValueError("Channel must be sms or email")
+    share_id = _next_share_id()
+    share = PendingPatientShare(
+        share_id=share_id,
+        patient_id=payload.patient_id,
+        recipient=payload.recipient,
+        channel=payload.channel,
+        otp_code="730194",
+        expires_at="2026-05-23T01:00:00Z",
+        consumed=False,
+    )
+    with _share_lock:
+        _patient_share_store[share_id] = share
+    return PatientShareOtpResponse(
+        share_id=share.share_id,
+        otp_code=share.otp_code,
+        expires_at=share.expires_at,
+    )
+
+
+def dispatch_patient_share(
+    payload: PatientShareDispatchRequest,
+) -> PatientShareDispatchResponse:
+    with _share_lock:
+        share = _patient_share_store.get(payload.share_id)
+        if share is None:
+            raise ValueError("Share request was not found")
+        if share.consumed:
+            raise ValueError("Share request has already been used")
+        if share.otp_code != payload.otp_code:
+            raise ValueError("Invalid OTP code")
+
+        provider_result = _provider_adapter.send(
+            channel=share.channel,
+            recipient=share.recipient,
+            message=payload.message,
+        )
+        _patient_share_store[share.share_id] = PendingPatientShare(
+            share_id=share.share_id,
+            patient_id=share.patient_id,
+            recipient=share.recipient,
+            channel=share.channel,
+            otp_code=share.otp_code,
+            expires_at=share.expires_at,
+            consumed=True,
+        )
+
+    return PatientShareDispatchResponse(
+        share_id=share.share_id,
+        channel=share.channel,
+        recipient=share.recipient,
+        provider=provider_result["provider"],
+        status=provider_result["status"],
+        sent_at=provider_result["sent_at"],
+    )

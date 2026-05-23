@@ -30,3 +30,30 @@ class CreateNotificationRequest(BaseModel):
     message: str
     channel: str
     status: str = "queued"
+
+
+class PatientShareOtpRequest(BaseModel):
+    patient_id: str
+    recipient: str
+    channel: str
+
+
+class PatientShareOtpResponse(BaseModel):
+    share_id: str
+    otp_code: str
+    expires_at: str
+
+
+class PatientShareDispatchRequest(BaseModel):
+    share_id: str
+    otp_code: str
+    message: str
+
+
+class PatientShareDispatchResponse(BaseModel):
+    share_id: str
+    channel: str
+    recipient: str
+    provider: str
+    status: str
+    sent_at: str

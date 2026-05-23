@@ -117,6 +117,24 @@ def test_notification_endpoints_require_authentication() -> None:
             },
         ),
         ("PATCH", "/api/v1/notifications/ntf_001/read", None),
+        (
+            "POST",
+            "/api/v1/notifications/patient-share/otp",
+            {
+                "patient_id": "pat_001",
+                "recipient": "+14155550123",
+                "channel": "sms",
+            },
+        ),
+        (
+            "POST",
+            "/api/v1/notifications/patient-share/dispatch",
+            {
+                "share_id": "shr_001",
+                "otp_code": "000000",
+                "message": "Secure report link",
+            },
+        ),
     )
 
     for method, path, payload in requests:
@@ -189,3 +207,61 @@ def test_create_notification_and_mark_as_read() -> None:
     assert read_payload["id"] == created["id"]
     assert read_payload["is_read"] is True
     assert read_payload["read_at"] is not None
+
+
+def test_patient_share_otp_and_dispatch_flow() -> None:
+    _install_test_db()
+    token = _login_and_get_access_token()
+
+    otp_response = asyncio.run(
+        _request(
+            "POST",
+            "/api/v1/notifications/patient-share/otp",
+            token=token,
+            json={
+                "patient_id": "pat_123",
+                "recipient": "patient@example.com",
+                "channel": "email",
+            },
+        )
+    )
+
+    assert otp_response.status_code == 200
+    otp_payload = otp_response.json()
+    assert otp_payload["share_id"] == "shr_001"
+    assert otp_payload["otp_code"] == "730194"
+    assert otp_payload["expires_at"] == "2026-05-23T01:00:00Z"
+
+    dispatch_response = asyncio.run(
+        _request(
+            "POST",
+            "/api/v1/notifications/patient-share/dispatch",
+            token=token,
+            json={
+                "share_id": otp_payload["share_id"],
+                "otp_code": otp_payload["otp_code"],
+                "message": "Report link: https://example.org/r/abc",
+            },
+        )
+    )
+
+    assert dispatch_response.status_code == 200
+    dispatch_payload = dispatch_response.json()
+    assert dispatch_payload["share_id"] == "shr_001"
+    assert dispatch_payload["channel"] == "email"
+    assert dispatch_payload["provider"] == "mock-provider"
+    assert dispatch_payload["status"] == "sent"
+
+    invalid_otp_response = asyncio.run(
+        _request(
+            "POST",
+            "/api/v1/notifications/patient-share/dispatch",
+            token=token,
+            json={
+                "share_id": "shr_001",
+                "otp_code": "000000",
+                "message": "Retry should fail after consumption",
+            },
+        )
+    )
+    assert invalid_otp_response.status_code == 400
