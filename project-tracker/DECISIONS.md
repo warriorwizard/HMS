@@ -24,3 +24,14 @@ Clinical AI features require secure data boundaries, audit logs, patient workflo
 Impact:
 Initial tasks prioritize engineering and safety infrastructure.
 
+## DEC-003: Use GitHub Issues + PRs As Execution System
+Date: 2026-05-23
+
+Decision:
+Use GitHub Issues and pull requests as the primary execution workflow, while keeping this local tracker as the architecture and planning mirror.
+
+Reason:
+Codex has working GitHub integration for issue and PR operations in this environment. This allows ticket-driven execution with branch/PR traceability and shared visibility.
+
+Impact:
+Execution tasks are tracked in `warriorwizard/HMS` issues. Local `project-tracker` files remain the source for full architecture decomposition and gap discovery.

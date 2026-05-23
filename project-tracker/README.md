@@ -3,7 +3,12 @@
 ## Purpose
 This folder is the working tracker for Tarini V6. It breaks the architecture into small implementation tasks and keeps visible status as work progresses.
 
-Use this as a local Jira-style board until we connect a real project tool.
+Use this as a local Jira-style board and architecture mirror for the GitHub execution workflow.
+
+## GitHub Execution Links
+- Repository: `https://github.com/warriorwizard/HMS`
+- Issues: `https://github.com/warriorwizard/HMS/issues`
+- Pull Requests: `https://github.com/warriorwizard/HMS/pulls`
 
 ## How To Check Status
 Open these files:
@@ -20,6 +25,10 @@ Open these files:
 - `BACKLOG.md`: full task breakdown grouped by product area and phase.
 - `CURRENT_WORK.md`: what I am actively working on and the latest status notes.
 - `DECISIONS.md`: product and engineering decisions that affect implementation.
+
+Also check GitHub for live execution status:
+- Issue state and assignment: `https://github.com/warriorwizard/HMS/issues`
+- PR review and merge state: `https://github.com/warriorwizard/HMS/pulls`
 
 ## Task ID Format
 Task IDs use this format:
