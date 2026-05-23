@@ -1,6 +1,7 @@
 import { AppShell } from "@/app/components/app-shell";
 import { ErrorState, FieldHint, Panel, StatusBadge } from "@/app/components/workspace-ui";
 import { fetchHealth, fetchSystemInfo, isApiError } from "@/app/lib/api";
+import { fetchTenantSettings, type TenantSettingsResource } from "@/app/lib/api/settings";
 import { settingsGroups } from "@/app/lib/workspace-data";
 
 export const dynamic = "force-dynamic";
@@ -17,6 +18,14 @@ function toFallbackMessage(source: string, error: unknown): string {
   }
 
   return `${source} check failed: backend is unavailable.`;
+}
+
+async function loadTenantSettings(): Promise<TenantSettingsResource | null> {
+  try {
+    return await fetchTenantSettings();
+  } catch {
+    return null;
+  }
 }
 
 async function loadLiveStatus(): Promise<LiveStatus> {
@@ -65,7 +74,10 @@ function getLiveStatusLabel(health: LiveStatus["health"], systemInfo: LiveStatus
 }
 
 export default async function SettingsPage() {
-  const { health, systemInfo, fallbackMessage } = await loadLiveStatus();
+  const [{ health, systemInfo, fallbackMessage }, tenantSettings] = await Promise.all([
+    loadLiveStatus(),
+    loadTenantSettings(),
+  ]);
 
   const backendTone = getLiveStatusTone(health, systemInfo);
   const backendLabel = getLiveStatusLabel(health, systemInfo);
@@ -76,6 +88,20 @@ export default async function SettingsPage() {
 
   return (
     <AppShell activePath="/settings" eyebrow="Administration" title="Settings">
+      {tenantSettings ? (
+        <section className="main-grid compact-top">
+          <Panel title="Tenant">
+            <div className="key-value-list">
+              <div><span>Name</span><strong>{tenantSettings.name}</strong></div>
+              <div><span>Slug</span><strong>{tenantSettings.slug}</strong></div>
+              <div>
+                <span>Timezone</span>
+                <strong>{String(tenantSettings.settings.timezone ?? "—")}</strong>
+              </div>
+            </div>
+          </Panel>
+        </section>
+      ) : null}
       <section className="settings-grid">
         {settingsGroups.map((group) => (
           <Panel key={group.title} title={group.title}>
