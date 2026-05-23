@@ -84,6 +84,8 @@ export const navItems: NavItem[] = [
   { label: "LIMS",          href: "/lims",                  requiredPermission: "workflow:read" },
   { label: "RIS",           href: "/ris",                   requiredPermission: "workflow:read" },
   { label: "PACS Viewer",   href: "/pacs/viewer",           requiredPermission: "reports:read" },
+  { label: "AI Intelligence", href: "/ai-intelligence",     requiredPermission: "analytics:read" },
+  { label: "Copilot",       href: "/copilot",               requiredPermission: "patients:read" },
   { label: "Analytics",     href: "/analytics",             requiredPermission: "analytics:read" },
   { label: "Notifications", href: "/notifications" },
   { label: "CRM",           href: "/crm",                   requiredPermission: "patients:read" },

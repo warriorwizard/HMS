@@ -11,6 +11,9 @@ export {
   fetchB2bPricingRules
 } from "./b2b";
 export { fetchCrmCampaigns, fetchCrmLeads, fetchCrmReminders } from "./crm";
+export { fetchAiResults, fetchRiskScore } from "./ai-intelligence";
+export { fetchCommandCenterQueue } from "./command-center";
+export { fetchCopilotContext, fetchCopilotConversations, fetchCopilotMessages } from "./copilot";
 export { fetchReportProcessingJobs, fetchReports } from "./reports";
 export { fetchLimsSamples } from "./lims";
 export { fetchPacsStudies, fetchPacsStudy } from "./pacs";
@@ -67,6 +70,23 @@ export type {
   CrmReminderResource,
   CrmRemindersQuery
 } from "./crm";
+export type {
+  AiExplainabilitySourceResource,
+  AiPaginatedResponse,
+  AiPagination,
+  AiResultResource
+} from "./ai-intelligence";
+export type {
+  CommandCenterPaginatedResponse,
+  CommandCenterPagination,
+  CommandCenterQueueResource
+} from "./command-center";
+export type {
+  CopilotConversationResource,
+  CopilotMessageResource,
+  CopilotPaginatedResponse,
+  CopilotPagination
+} from "./copilot";
 export type {
   LimsPaginatedResponse,
   LimsPagination,

@@ -2,8 +2,11 @@ from fastapi import APIRouter
 
 from app.api.routes import health
 from app.modules.analytics.api import router as analytics_router
+from app.modules.ai_intelligence.api import router as ai_router
 from app.modules.audit.api import router as audit_router
 from app.modules.b2b.api import router as b2b_router
+from app.modules.command_center.api import router as command_center_router
+from app.modules.copilot.api import router as copilot_router
 from app.modules.crm.api import router as crm_router
 from app.modules.diagnostic_workflow.api import router as workflow_router
 from app.modules.patients.api import router as patients_router
@@ -32,5 +35,8 @@ api_router.include_router(reports_router)
 api_router.include_router(lims_router)
 api_router.include_router(ris_router)
 api_router.include_router(pacs_router)
+api_router.include_router(ai_router)
+api_router.include_router(command_center_router)
+api_router.include_router(copilot_router)
 api_router.include_router(analytics_router)
 api_router.include_router(notifications_router)
