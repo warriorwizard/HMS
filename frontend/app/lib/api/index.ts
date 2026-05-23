@@ -11,6 +11,8 @@ export {
   fetchB2bPricingRules
 } from "./b2b";
 export { fetchCrmCampaigns, fetchCrmLeads, fetchCrmReminders } from "./crm";
+export { fetchReportProcessingJobs, fetchReports } from "./reports";
+export { fetchDoctorReviewQueue, fetchTechnicianQueue, fetchWorkflowTasks } from "./workflow";
 export {
   fetchBillingInvoices,
   fetchBillingOrders,
@@ -63,6 +65,12 @@ export type {
   CrmRemindersQuery
 } from "./crm";
 export type {
+  ProcessingJobResource,
+  ReportResource,
+  ReportsPaginatedResponse,
+  ReportsPagination
+} from "./reports";
+export type {
   PatientPaginatedResponse,
   PatientPagination,
   PatientResource,
@@ -70,6 +78,12 @@ export type {
   TimelineEventResource,
   VisitResource
 } from "./patients";
+export type {
+  WorkflowPaginatedResponse,
+  WorkflowPagination,
+  WorkflowQueueResource,
+  WorkflowTaskResource
+} from "./workflow";
 export type { HealthResource, SystemInfoResource } from "./system";
 export type { ApiErrorCode } from "./errors";
 export type {
