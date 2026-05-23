@@ -29,6 +29,7 @@ Current local URLs:
 - Backend health: `http://127.0.0.1:8000/api/v1/health`
 - Admin console: `/admin/tenants`, `/admin/users`, `/admin/operations`, `/admin/configuration`
 - CRM workspace: `/crm`, `/crm/campaigns`, `/crm/dashboard`
+- B2B workspace: `/b2b/partners`, `/b2b/orders`, `/b2b/billing`
 
 ## Architecture Source Of Truth
 Start with:
