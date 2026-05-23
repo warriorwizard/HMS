@@ -34,12 +34,32 @@ export type AdminConfigurationSection = {
   fields: AdminConfigurationField[];
 };
 
+export type CrmFunnelStage = {
+  stage: string;
+  leads: number;
+  conversion: number;
+  owner: string;
+  trend: string;
+};
+
+export type CrmHealthRow = {
+  segment: string;
+  coverage: string;
+  responseSla: string;
+  health: string;
+  tone: StatusTone;
+  note: string;
+};
+
 export const navItems = [
   { label: "Command", href: "/doctor/command-center" },
   { label: "Patients", href: "/patients" },
   { label: "Reports", href: "/reports" },
   { label: "Workflow", href: "/workflow" },
   { label: "Analytics", href: "/analytics" },
+  { label: "CRM", href: "/crm" },
+  { label: "Campaigns", href: "/crm/campaigns" },
+  { label: "CRM Dashboard", href: "/crm/dashboard" },
   { label: "Tenants", href: "/admin/tenants" },
   { label: "User Roles", href: "/admin/users" },
   { label: "Admin Ops", href: "/admin/operations" },
@@ -178,6 +198,63 @@ export const analyticsBars = [
   { label: "Pathology", value: 64 },
   { label: "Follow-up", value: 48 },
   { label: "Billing", value: 31 }
+];
+
+export const crmDashboardMetrics: Metric[] = [
+  { label: "New leads", value: "412", trend: "+38 this week" },
+  { label: "Qualified pipeline", value: "167", trend: "41% qualification rate" },
+  { label: "Opportunity value", value: "INR 2.7M", trend: "+11% vs last sprint" },
+  { label: "Won this month", value: "39", trend: "23% close rate" }
+];
+
+export const crmFunnelStages: CrmFunnelStage[] = [
+  { stage: "Inbound leads", leads: 412, conversion: 100, owner: "Demand Ops", trend: "+9% weekly" },
+  { stage: "Marketing qualified", leads: 260, conversion: 63, owner: "Growth", trend: "+6% weekly" },
+  { stage: "Sales qualified", leads: 167, conversion: 41, owner: "BD team", trend: "+4% weekly" },
+  { stage: "Proposal shared", leads: 91, conversion: 22, owner: "Account execs", trend: "+2% weekly" },
+  { stage: "Closed won", leads: 39, conversion: 9, owner: "Regional leads", trend: "+1% weekly" }
+];
+
+export const crmHealthRows: CrmHealthRow[] = [
+  {
+    segment: "Enterprise hospitals",
+    coverage: "23 accounts",
+    responseSla: "2h 18m avg",
+    health: "Stable",
+    tone: "good",
+    note: "Decision-maker engagement is consistent across top targets."
+  },
+  {
+    segment: "Multi-clinic groups",
+    coverage: "41 accounts",
+    responseSla: "5h 06m avg",
+    health: "At risk",
+    tone: "warning",
+    note: "Follow-up lag on procurement questions is slowing conversions."
+  },
+  {
+    segment: "Diagnostic centers",
+    coverage: "58 accounts",
+    responseSla: "7h 42m avg",
+    health: "Escalated",
+    tone: "danger",
+    note: "Price sensitivity is high; discount guardrails need review."
+  }
+];
+
+export const crmWatchlist = [
+  {
+    title: "Nurture flow saturation",
+    detail: "Email sequence #4 has 28% lower click-through in the South region."
+  },
+  {
+    title: "Lead qualification drift",
+    detail: "19 opportunities are waiting for updated budget and timeline fields."
+  },
+  {
+    title: "Renewal window opening",
+    detail: "12 existing tenants enter renewal discussions within the next 14 days."
+  }
 ];
 
 export const operationsMetrics: Metric[] = [

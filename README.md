@@ -28,6 +28,7 @@ Current local URLs:
 - Frontend: `http://127.0.0.1:3000`
 - Backend health: `http://127.0.0.1:8000/api/v1/health`
 - Admin console: `/admin/tenants`, `/admin/users`, `/admin/operations`, `/admin/configuration`
+- CRM workspace: `/crm`, `/crm/campaigns`, `/crm/dashboard`
 
 ## Architecture Source Of Truth
 Start with:
