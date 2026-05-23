@@ -35,3 +35,8 @@ http://localhost:3000
 - TypeScript configuration.
 - Initial clinical operations workspace at `/`.
 - Global CSS foundation for dense operational UI.
+- Admin console surfaces:
+  - `/admin/tenants`
+  - `/admin/users`
+  - `/admin/operations`
+  - `/admin/configuration`
