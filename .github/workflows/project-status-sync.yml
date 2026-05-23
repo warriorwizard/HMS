@@ -1,0 +1,331 @@
+name: Project Status Sync
+
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+      - closed
+      - labeled
+      - unlabeled
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: Optional issue number to sync. Leave blank to sync all repo issues.
+        required: false
+        type: number
+
+permissions:
+  contents: read
+  issues: read
+  repository-projects: write
+
+jobs:
+  sync-project-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync issue(s) to Project status
+        uses: actions/github-script@v7
+        env:
+          PROJECT_OWNER: ${{ vars.PROJECT_OWNER }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+        with:
+          github-token: ${{ secrets.PROJECT_AUTOMATION_TOKEN != '' && secrets.PROJECT_AUTOMATION_TOKEN || github.token }}
+          script: |
+            const owner = process.env.PROJECT_OWNER || context.repo.owner;
+            const repo = context.repo.repo;
+            const configuredProjectNumber = process.env.PROJECT_NUMBER ? Number(process.env.PROJECT_NUMBER) : null;
+
+            const normalize = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+            const hasLabel = (labels, target) => labels.some((label) => normalize(label) === normalize(target));
+
+            async function getProjectByNumber(projectNumber) {
+              const query = `
+                query($owner: String!, $number: Int!) {
+                  organization(login: $owner) {
+                    projectV2(number: $number) {
+                      id
+                      number
+                      title
+                      fields(first: 50) {
+                        nodes {
+                          ... on ProjectV2SingleSelectField {
+                            id
+                            name
+                            options {
+                              id
+                              name
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  user(login: $owner) {
+                    projectV2(number: $number) {
+                      id
+                      number
+                      title
+                      fields(first: 50) {
+                        nodes {
+                          ... on ProjectV2SingleSelectField {
+                            id
+                            name
+                            options {
+                              id
+                              name
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+
+              const result = await github.graphql(query, { owner, number: projectNumber });
+              return result.organization?.projectV2 || result.user?.projectV2 || null;
+            }
+
+            async function discoverProject() {
+              if (configuredProjectNumber) {
+                const project = await getProjectByNumber(configuredProjectNumber);
+                if (!project) {
+                  throw new Error(`PROJECT_NUMBER=${configuredProjectNumber} not found for owner '${owner}'.`);
+                }
+                return project;
+              }
+
+              const query = `
+                query($owner: String!) {
+                  organization(login: $owner) {
+                    projectsV2(first: 20, orderBy: { field: UPDATED_AT, direction: DESC }) {
+                      nodes {
+                        id
+                        number
+                        title
+                        fields(first: 50) {
+                          nodes {
+                            ... on ProjectV2SingleSelectField {
+                              id
+                              name
+                              options {
+                                id
+                                name
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  user(login: $owner) {
+                    projectsV2(first: 20, orderBy: { field: UPDATED_AT, direction: DESC }) {
+                      nodes {
+                        id
+                        number
+                        title
+                        fields(first: 50) {
+                          nodes {
+                            ... on ProjectV2SingleSelectField {
+                              id
+                              name
+                              options {
+                                id
+                                name
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+
+              const result = await github.graphql(query, { owner });
+              const orgProjects = result.organization?.projectsV2?.nodes || [];
+              const userProjects = result.user?.projectsV2?.nodes || [];
+              const projects = [...orgProjects, ...userProjects];
+
+              if (projects.length === 0) {
+                throw new Error(
+                  `No ProjectV2 found under '${owner}'. Set repository var PROJECT_OWNER/PROJECT_NUMBER.`
+                );
+              }
+
+              const repoName = normalize(repo);
+              const projectWithRepoName = projects.find((project) => normalize(project.title).includes(repoName));
+              return projectWithRepoName || projects[0];
+            }
+
+            async function fetchIssueNode(issueNodeId) {
+              const query = `
+                query($issueId: ID!) {
+                  node(id: $issueId) {
+                    ... on Issue {
+                      id
+                      number
+                      title
+                      state
+                      labels(first: 50) {
+                        nodes {
+                          name
+                        }
+                      }
+                      projectItems(first: 100) {
+                        nodes {
+                          id
+                          project {
+                            id
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+              const result = await github.graphql(query, { issueId: issueNodeId });
+              return result.node;
+            }
+
+            function pickStatusOption(statusOptions, issueState, labelNames) {
+              const optionsByKey = new Map(statusOptions.map((option) => [normalize(option.name), option]));
+              const findOption = (candidates) => {
+                for (const candidate of candidates) {
+                  const match = optionsByKey.get(normalize(candidate));
+                  if (match) return match;
+                }
+                return null;
+              };
+
+              if (issueState === "CLOSED") {
+                return (
+                  findOption(["Done", "Completed", "Closed"]) ||
+                  statusOptions[statusOptions.length - 1] ||
+                  null
+                );
+              }
+
+              if (hasLabel(labelNames, "review")) {
+                return findOption(["Review", "In Review"]);
+              }
+
+              if (hasLabel(labelNames, "in-progress")) {
+                return findOption(["In Progress", "Doing"]);
+              }
+
+              if (hasLabel(labelNames, "ready") || hasLabel(labelNames, "todo")) {
+                return findOption(["Ready", "Todo", "To Do"]);
+              }
+
+              return findOption(["Backlog", "Todo", "To Do", "Ready"]) || statusOptions[0] || null;
+            }
+
+            async function ensureProjectItem(projectId, issueContentId, existingItems) {
+              const existing = existingItems.find((item) => item.project?.id === projectId);
+              if (existing) {
+                return existing.id;
+              }
+
+              const mutation = `
+                mutation($projectId: ID!, $contentId: ID!) {
+                  addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+                    item {
+                      id
+                    }
+                  }
+                }
+              `;
+              const result = await github.graphql(mutation, { projectId, contentId: issueContentId });
+              return result.addProjectV2ItemById.item.id;
+            }
+
+            async function updateStatus(projectId, itemId, fieldId, optionId) {
+              const mutation = `
+                mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                  updateProjectV2ItemFieldValue(
+                    input: {
+                      projectId: $projectId
+                      itemId: $itemId
+                      fieldId: $fieldId
+                      value: { singleSelectOptionId: $optionId }
+                    }
+                  ) {
+                    projectV2Item {
+                      id
+                    }
+                  }
+                }
+              `;
+              await github.graphql(mutation, { projectId, itemId, fieldId, optionId });
+            }
+
+            async function syncOneIssue(project, statusField, issueLike) {
+              const issueNode = await fetchIssueNode(issueLike.node_id);
+              if (!issueNode) {
+                core.warning(`Skipping issue #${issueLike.number}: node not accessible.`);
+                return;
+              }
+
+              const labelNames = (issueNode.labels?.nodes || []).map((label) => label.name);
+              const statusOption = pickStatusOption(statusField.options, issueNode.state, labelNames);
+              if (!statusOption) {
+                core.warning(`No Status option could be selected for issue #${issueNode.number}.`);
+                return;
+              }
+
+              const itemId = await ensureProjectItem(project.id, issueNode.id, issueNode.projectItems?.nodes || []);
+              await updateStatus(project.id, itemId, statusField.id, statusOption.id);
+
+              core.info(
+                `Synced issue #${issueNode.number} "${issueNode.title}" -> Status "${statusOption.name}" in project "${project.title}".`
+              );
+            }
+
+            async function getIssuesToSync() {
+              const issueInput = context.payload.inputs?.issue_number;
+              const directIssue = context.payload.issue;
+
+              if (directIssue?.number) {
+                return [directIssue];
+              }
+
+              if (issueInput) {
+                const response = await github.rest.issues.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: Number(issueInput),
+                });
+                return [response.data];
+              }
+
+              const allIssues = await github.paginate(github.rest.issues.listForRepo, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: "all",
+                per_page: 100,
+              });
+
+              return allIssues.filter((issue) => !issue.pull_request);
+            }
+
+            const project = await discoverProject();
+            const statusField = (project.fields?.nodes || []).find(
+              (field) => normalize(field.name) === "status" && Array.isArray(field.options)
+            );
+
+            if (!statusField) {
+              throw new Error(
+                `Project "${project.title}" (#${project.number}) has no single-select field named 'Status'.`
+              );
+            }
+
+            const issues = await getIssuesToSync();
+            core.info(`Preparing to sync ${issues.length} issue(s) to project "${project.title}" (#${project.number}).`);
+
+            for (const issue of issues) {
+              await syncOneIssue(project, statusField, issue);
+            }
+
+            core.info("Project status sync finished.");
