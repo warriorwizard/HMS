@@ -1,9 +1,11 @@
+from datetime import datetime
+from typing import Any
+
 from sqlalchemy import (
     Boolean,
     DateTime,
     ForeignKey,
     Index,
-    Integer,
     JSON,
     String,
     Text,
@@ -13,16 +15,17 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
+from app.db.conventions import TimestampMixin as ConventionTimestampMixin
 from app.db.ids import new_id
 
 
-class TimestampMixin:
-    created_at: Mapped[object] = mapped_column(
+class TimestampMixin(ConventionTimestampMixin):
+    created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
     )
-    updated_at: Mapped[object] = mapped_column(
+    updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
@@ -37,7 +40,7 @@ class Tenant(Base, TimestampMixin):
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     slug: Mapped[str] = mapped_column(String(120), nullable=False, unique=True)
     status: Mapped[str] = mapped_column(String(40), nullable=False, default="active")
-    settings_json: Mapped[dict | None] = mapped_column("settings", JSON, nullable=True)
+    settings_json: Mapped[dict[str, Any] | None] = mapped_column("settings", JSON, nullable=True)
 
     sites: Mapped[list["TenantSite"]] = relationship(back_populates="tenant")
     departments: Mapped[list["Department"]] = relationship(back_populates="tenant")
@@ -93,7 +96,7 @@ class User(Base, TimestampMixin):
     first_name: Mapped[str] = mapped_column(String(120), nullable=False)
     last_name: Mapped[str] = mapped_column(String(120), nullable=False)
     status: Mapped[str] = mapped_column(String(40), nullable=False, default="active")
-    last_login_at: Mapped[object | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     memberships: Mapped[list["Membership"]] = relationship(back_populates="user")
 
@@ -137,7 +140,7 @@ class RolePermission(Base):
 
     role_id: Mapped[str] = mapped_column(ForeignKey("roles.id"), primary_key=True)
     permission_id: Mapped[str] = mapped_column(ForeignKey("permissions.id"), primary_key=True)
-    created_at: Mapped[object] = mapped_column(
+    created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
@@ -181,8 +184,8 @@ class UserSession(Base, TimestampMixin):
     refresh_token_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     user_agent_hash: Mapped[str | None] = mapped_column(String(128), nullable=True)
     ip_hash: Mapped[str | None] = mapped_column(String(128), nullable=True)
-    expires_at: Mapped[object] = mapped_column(DateTime(timezone=True), nullable=False)
-    revoked_at: Mapped[object | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class AuditLog(Base):
@@ -202,11 +205,10 @@ class AuditLog(Base):
     resource_id: Mapped[str | None] = mapped_column(String(80), nullable=True)
     before_hash: Mapped[str | None] = mapped_column(String(128), nullable=True)
     after_hash: Mapped[str | None] = mapped_column(String(128), nullable=True)
-    metadata_json: Mapped[dict | None] = mapped_column("metadata", JSON, nullable=True)
+    metadata_json: Mapped[dict[str, Any] | None] = mapped_column("metadata", JSON, nullable=True)
     ip_hash: Mapped[str | None] = mapped_column(String(128), nullable=True)
-    created_at: Mapped[object] = mapped_column(
+    created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
     )
-
