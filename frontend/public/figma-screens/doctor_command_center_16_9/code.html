@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clinical Intelligence - Doctor Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "primary-fixed-dim": "#6bd8cb",
+                      "inverse-surface": "#213145",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "tertiary-container": "#2170e4",
+                      "outline": "#6d7a77",
+                      "on-surface": "#0b1c30",
+                      "on-primary-fixed-variant": "#005049",
+                      "on-primary-container": "#f4fffc",
+                      "surface-dim": "#cbdbf5",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "surface-tint": "#006a61",
+                      "primary-container": "#008378",
+                      "on-tertiary-fixed-variant": "#004395",
+                      "on-tertiary-fixed": "#001a42",
+                      "surface-container-high": "#dce9ff",
+                      "on-primary-fixed": "#00201d",
+                      "on-primary": "#ffffff",
+                      "inverse-primary": "#6bd8cb",
+                      "surface-bright": "#f8f9ff",
+                      "outline-variant": "#bcc9c6",
+                      "on-tertiary-container": "#fefcff",
+                      "surface-container": "#e5eeff",
+                      "secondary-fixed": "#dae2fd",
+                      "surface-container-highest": "#d3e4fe",
+                      "tertiary": "#0058be",
+                      "on-background": "#0b1c30",
+                      "primary": "#00685f",
+                      "inverse-on-surface": "#eaf1ff",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "on-error-container": "#93000a",
+                      "surface-variant": "#d3e4fe",
+                      "on-secondary-fixed": "#131b2e",
+                      "secondary-container": "#dae2fd",
+                      "tertiary-fixed": "#d8e2ff",
+                      "secondary": "#565e74",
+                      "on-surface-variant": "#3d4947",
+                      "on-secondary-container": "#5c647a",
+                      "surface-container-low": "#eff4ff",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed": "#89f5e7",
+                      "on-secondary": "#ffffff",
+                      "background": "#f8f9ff",
+                      "tertiary-fixed-dim": "#adc6ff",
+                      "surface": "#f8f9ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "32px",
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "base": "4px",
+                      "xs": "8px",
+                      "max-width": "1440px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "32px",
+                      "sm": "12px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Public Sans"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Public Sans"
+                      ],
+                      "data-mono": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Public Sans"
+                      ],
+                      "display-lg-mobile": [
+                              "Public Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .layer-0 { background-color: #F8FAFC; }
+        .layer-1 { 
+            background-color: #FFFFFF; 
+            border: 1px solid theme('colors.surface-variant'); 
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.04); 
+        }
+        .ai-pulse {
+            animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            border: 2px solid theme('colors.primary');
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: theme('colors.primary-fixed-dim'); }
+            50% { border-color: theme('colors.primary'); }
+        }
+      </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full flex flex-col w-64 border-r border-outline-variant dark:border-outline bg-surface-container-low dark:bg-surface-dim z-50">
+<div class="p-6 border-b border-outline-variant flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-inverse-on-surface leading-tight">MedIntelligence</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Clinical AI v2.4</p>
+</div>
+</div>
+<div class="p-4">
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                AI Copilot
+            </button>
+</div>
+<ul class="flex-1 px-4 py-2 flex flex-col gap-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 border-l-4 border-primary bg-secondary-container text-on-secondary-container dark:bg-primary-container dark:text-on-primary-container hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors rounded-r-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Command Center</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors border-l-4 border-transparent rounded-r-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Patients</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors border-l-4 border-transparent rounded-r-lg" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors border-l-4 border-transparent rounded-r-lg" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+</li>
+</ul>
+<ul class="p-4 border-t border-outline-variant flex flex-col gap-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Canvas -->
+<div class="flex-1 ml-64 flex flex-col h-full bg-[#F8FAFC]">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-6 h-16 sticky top-0 z-40 bg-surface dark:bg-surface-container border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none shrink-0">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-semibold text-primary dark:text-inverse-primary">Clinical Intelligence</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="pl-10 pr-4 py-2 w-64 rounded-full border border-outline-variant bg-surface-container-lowest focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-body-sm text-body-sm transition-colors" placeholder="Search patients, ID, or metrics..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors relative opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="hover:text-primary transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="hover:text-primary transition-colors opacity-80 hover:opacity-100">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border-2 border-surface-variant">
+<img alt="Doctor Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a male doctor in his 40s wearing standard clinical scrubs. The lighting is clean, bright, and slightly cool-toned to match a modern hospital environment. The background is softly blurred showing high-tech medical equipment. The overall aesthetic is trustworthy, competent, and integrates seamlessly with a light-mode clinical UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRvKHn5LboAApPRorlDebpGifFh0G4z2leYSbnFz8TxxzpgfQWEV-_por3hWoYjtR4erEl_65ad49bxdDIRzKM5jypNiUtH-pc0-UsyqokyvS5Bilw9wxeUZKd00oKztley7LJkIsEXV-ij3fh0hZ9zjTGgzEaNi89MYUd0PrAuZGU5TozfR3NWrd73zOaBYcr7KIdG3APgCXS-fnM0yvrYXrfQLz4yhJZklG-OOluAR7h54MlycBhmDR9sNsLLEkAMgnlzapsyHI"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<main class="flex-1 overflow-y-auto p-gutter">
+<div class="grid grid-cols-12 gap-gutter w-full">
+<!-- Left Column: AI Priority Queue (Spans 8 cols) -->
+<div class="col-span-12 xl:col-span-8 2xl:col-span-9 flex flex-col gap-gutter">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">AI Priority Queue</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Real-time risk assessment sorted by clinical urgency.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md flex items-center gap-1 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+                                Filter
+                            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">sort</span>
+                                Highest Risk First
+                            </button>
+</div>
+</div>
+<!-- Patient List Bento Grids -->
+<div class="grid grid-cols-1 2xl:grid-cols-2 gap-4">
+<!-- Critical Patient Card -->
+<div class="layer-1 rounded-xl p-6 relative overflow-hidden ai-pulse">
+<!-- Subtle AI indicator background -->
+<div class="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-primary-fixed/20 to-transparent pointer-events-none"></div>
+<div class="flex flex-col xl:flex-row items-start justify-between relative z-10 gap-4">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-error-container text-on-error-container flex items-center justify-center font-headline-md text-headline-md">
+                                        JD
+                                    </div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">John Doe</h3>
+<span class="px-2 py-0.5 rounded-full bg-error text-on-error font-label-md text-label-md">CRITICAL: 94</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-sm">#MRN-88492</span>
+</div>
+<div class="flex gap-4 mt-2 font-body-sm text-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> 68yo Male</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">bed</span> Bed 4A (ICU)</span>
+</div>
+</div>
+</div>
+<div class="text-left xl:text-right">
+<div class="font-label-md text-label-md text-primary flex items-center gap-1 justify-start xl:justify-end">
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span> AI Rationale
+                                    </div>
+<p class="font-body-md text-body-md text-on-surface mt-1 max-w-xs">Sudden spike in resting HR combined with erratic SpO2 patterns over last 45 mins. High probability of decompensation.</p>
+</div>
+</div>
+<div class="mt-6 flex flex-col sm:flex-row items-end gap-6 border-t border-outline-variant pt-4">
+<!-- Sparkline Area -->
+<div class="flex-1 w-full">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Risk Trend (24h)</span>
+<span class="font-data-mono text-data-mono text-error flex items-center"><span class="material-symbols-outlined text-[16px]">trending_up</span> +12%</span>
+</div>
+<!-- Simplified SVG Sparkline representation -->
+<div class="h-12 w-full flex items-end gap-1">
+<div class="w-full h-1/4 bg-surface-container-high rounded-t-sm"></div>
+<div class="w-full h-1/3 bg-surface-container-high rounded-t-sm"></div>
+<div class="w-full h-1/4 bg-surface-container-high rounded-t-sm"></div>
+<div class="w-full h-1/2 bg-surface-container-high rounded-t-sm"></div>
+<div class="w-full h-2/3 bg-surface-container-high rounded-t-sm"></div>
+<div class="w-full h-full bg-error/80 rounded-t-sm"></div>
+</div>
+</div>
+<div class="flex gap-2 shrink-0">
+<button class="px-4 py-2 rounded-lg border border-outline bg-transparent text-secondary font-label-md text-label-md hover:bg-surface-container-low transition-colors">Assign</button>
+<button class="px-4 py-2 rounded-lg border border-outline bg-transparent text-secondary font-label-md text-label-md hover:bg-surface-container-low transition-colors">Escalate</button>
+<button class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:opacity-90 transition-opacity">Review Now</button>
+</div>
+</div>
+</div>
+<!-- High Risk Patient Card -->
+<div class="layer-1 rounded-xl p-6 relative overflow-hidden">
+<div class="flex flex-col xl:flex-row items-start justify-between relative z-10 gap-4">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest text-on-surface flex items-center justify-center font-headline-md text-headline-md">
+                                        MS
+                                    </div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Maria Sanchez</h3>
+<span class="px-2 py-0.5 rounded-full bg-[#FF8C00] text-white font-label-md text-label-md">HIGH: 78</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant text-sm">#MRN-11204</span>
+</div>
+<div class="flex gap-4 mt-2 font-body-sm text-body-sm text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> 52yo Female</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">bed</span> Bed 12B (Med-Surg)</span>
+</div>
+</div>
+</div>
+<div class="text-left xl:text-right">
+<div class="font-label-md text-label-md text-primary flex items-center gap-1 justify-start xl:justify-end">
+<span class="material-symbols-outlined text-[16px]">auto_awesome</span> AI Rationale
+                                    </div>
+<p class="font-body-md text-body-md text-on-surface mt-1 max-w-xs">Sustained hypotensive trend over 3 hours despite fluid resuscitation. Monitor closely.</p>
+</div>
+</div>
+<div class="mt-6 flex flex-col sm:flex-row items-end gap-6 border-t border-outline-variant pt-4">
+<!-- Sparkline Area -->
+<div class="flex-1 w-full">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Risk Trend (24h)</span>
+<span class="font-data-mono text-data-mono text-[#FF8C00] flex items-center"><span class="material-symbols-outlined text-[16px]">trending_up</span> +5%</span>
+</div>
+<div class="h-12 w-full flex items-end gap-1">
+<div class="w-full h-1/2 bg-surface-container-high rounded-t-sm"></div>
+<div class="w-full h-1/2 bg-surface-container-high rounded-t-sm"></div>
+<div class="w-full h-2/3 bg-surface-container-high rounded-t-sm"></div>
+<div class="w-full h-2/3 bg-surface-container-high rounded-t-sm"></div>
+<div class="w-full h-3/4 bg-[#FF8C00]/80 rounded-t-sm"></div>
+<div class="w-full h-3/4 bg-[#FF8C00]/80 rounded-t-sm"></div>
+</div>
+</div>
+<div class="flex gap-2 shrink-0">
+<button class="px-4 py-2 rounded-lg border border-outline bg-transparent text-secondary font-label-md text-label-md hover:bg-surface-container-low transition-colors">Assign</button>
+<button class="px-4 py-2 rounded-lg border border-outline bg-transparent text-secondary font-label-md text-label-md hover:bg-surface-container-low transition-colors">Escalate</button>
+<button class="px-4 py-2 rounded-lg bg-surface-container-high text-primary font-label-md text-label-md hover:bg-surface-container-highest transition-colors">Review</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Urgent Alerts & System Status (Spans 4 cols) -->
+<div class="col-span-12 xl:col-span-4 2xl:col-span-3 flex flex-col gap-gutter">
+<!-- Urgent Alerts Panel -->
+<div class="layer-1 rounded-xl p-6 flex flex-col h-full">
+<div class="flex items-center justify-between mb-4 pb-2 border-b border-outline-variant">
+<h2 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-error">warning</span>
+                                Urgent Alerts
+                            </h2>
+<span class="w-6 h-6 rounded-full bg-error-container text-error text-xs font-bold flex items-center justify-center">3</span>
+</div>
+<div class="flex flex-col gap-4 overflow-y-auto">
+<!-- Alert Item -->
+<div class="p-3 rounded-lg bg-error-container/30 border border-error-container">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-error mt-0.5 text-[20px]">biotech</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Critical Lab Result: JD</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Troponin T levels elevated significantly above baseline. Intervention required.</p>
+<span class="font-data-mono text-data-mono text-xs text-error mt-2 block">Just now</span>
+</div>
+</div>
+</div>
+<!-- Alert Item -->
+<div class="p-3 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#FF8C00] mt-0.5 text-[20px]">sensors_off</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Telemetry Disconnect</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Bed 8C telemetry signal lost. Please dispatch nursing staff to verify connection.</p>
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant mt-2 block">12 mins ago</span>
+</div>
+</div>
+</div>
+<!-- Alert Item -->
+<div class="p-3 rounded-lg bg-surface-container-low border border-outline-variant">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5 text-[20px]">assignment_turned_in</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Consult Requested</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Cardiology consult requested for Patient MS by Dr. Roberts.</p>
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant mt-2 block">45 mins ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

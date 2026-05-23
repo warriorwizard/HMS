@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Executive Intelligence Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Public+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#6bd8cb",
+                        "inverse-surface": "#213145",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#2170e4",
+                        "outline": "#6d7a77",
+                        "on-surface": "#0b1c30",
+                        "on-primary-fixed-variant": "#005049",
+                        "on-primary-container": "#f4fffc",
+                        "surface-dim": "#cbdbf5",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "surface-tint": "#006a61",
+                        "primary-container": "#008378",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-tertiary-fixed": "#001a42",
+                        "surface-container-high": "#dce9ff",
+                        "on-primary-fixed": "#00201d",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#6bd8cb",
+                        "surface-bright": "#f8f9ff",
+                        "outline-variant": "#bcc9c6",
+                        "on-tertiary-container": "#fefcff",
+                        "surface-container": "#e5eeff",
+                        "secondary-fixed": "#dae2fd",
+                        "surface-container-highest": "#d3e4fe",
+                        "tertiary": "#0058be",
+                        "on-background": "#0b1c30",
+                        "primary": "#00685f",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#d3e4fe",
+                        "on-secondary-fixed": "#131b2e",
+                        "secondary-container": "#dae2fd",
+                        "tertiary-fixed": "#d8e2ff",
+                        "secondary": "#565e74",
+                        "on-surface-variant": "#3d4947",
+                        "on-secondary-container": "#5c647a",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#89f5e7",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "surface": "#f8f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "max-width": "1440px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px",
+                        "sm": "12px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Public Sans", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "headline-sm": ["Public Sans", "sans-serif"],
+                        "data-mono": ["Inter", "monospace"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "display-lg": ["Public Sans", "sans-serif"],
+                        "display-lg-mobile": ["Public Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F8FAFC; }
+        .clinical-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        .ai-pulse {
+            animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(33, 112, 228, 1); }
+            50% { border-color: rgba(33, 112, 228, 0.3); }
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface bg-background flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col w-64 border-r border-outline-variant dark:border-outline bg-surface-container-low dark:bg-surface-dim z-50">
+<div class="flex items-center gap-3 p-6 border-b border-outline-variant">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">M</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-inverse-on-surface">MedIntelligence</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Clinical AI v2.4</p>
+</div>
+</div>
+<nav class="flex-1 py-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 border-l-4 border-primary bg-secondary-container text-on-secondary-container dark:bg-primary-container dark:text-on-primary-container hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Command Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Patients</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+</nav>
+<div class="p-4 border-t border-outline-variant">
+<button class="w-full py-2 bg-primary text-on-primary rounded font-label-md text-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                AI Copilot
+            </button>
+</div>
+<div class="py-4 border-t border-outline-variant flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-6 sticky top-0 z-40 w-full h-16 border-b border-outline-variant dark:border-outline bg-surface dark:bg-surface-container shadow-sm dark:shadow-none">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-md text-headline-md font-semibold text-primary dark:text-inverse-primary">Clinical Intelligence</h2>
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-outline-variant rounded-full text-body-sm focus:border-primary focus:ring-1 focus:ring-primary w-96 lg:w-[480px] outline-none" placeholder="Search across systems..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors hover:opacity-80"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors hover:opacity-80"><span class="material-symbols-outlined">history</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors hover:opacity-80"><span class="material-symbols-outlined">help_outline</span></button>
+<div class="w-8 h-8 rounded-full bg-secondary-container ml-2 overflow-hidden border border-outline-variant cursor-pointer">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT4glnrzhijJ1EUOMiKBvIKyHK3bGlI6-MXKt3DeosYK5QubYy9ovXqzgQOJiiyMYu_Q3j83mx72yqOIIu7rbDKMMYejulfAycgOOSc6DsKCnyfDcVNRD-pbxucV8a1ORBnSrEFQPUaD_CyyI3eY-Ds23WPo4q2S4zl-3RY2UuSjC3DlZ4mF6D_tLj9R3uyQSQACTQcYc0inZ9aTDkW2705c73fW-7ftR7uwnvRr6JthoQkNYLkHP3rP9CTSzPlisVjf6SoqS03o8"/>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 p-gutter bg-surface-bright overflow-y-auto w-full max-w-[2000px] mx-auto">
+<div class="flex justify-between items-end mb-gutter">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Executive Overview</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Real-time synthesis of hospital operations and AI diagnostic effectiveness.</p>
+</div>
+<div class="flex gap-3">
+<select class="bg-surface border border-outline-variant rounded px-4 py-2 font-label-md text-label-md text-on-surface outline-none focus:border-primary">
+<option>Last 30 Days</option>
+<option>Last Quarter</option>
+<option>Year to Date</option>
+</select>
+<button class="bg-primary text-on-primary px-4 py-2 rounded font-label-md text-label-md flex items-center gap-2 hover:bg-surface-tint transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span> Export Report
+                    </button>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-gutter mb-gutter">
+<!-- KPIs -->
+<div class="col-span-12 sm:col-span-6 lg:col-span-3 clinical-card rounded-lg p-lg flex flex-col justify-between">
+<div>
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-2 block">AI Screening Volume</span>
+<div class="font-headline-md text-headline-md text-on-surface mb-1">12,450</div>
+<div class="flex items-center gap-1 text-[12px] text-primary">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+14.2% vs last month</span>
+</div>
+</div>
+<div class="h-16 mt-4 w-full bg-surface-container-low rounded relative overflow-hidden">
+<!-- Simulated sparkline -->
+<div class="absolute bottom-0 left-0 h-full w-full opacity-20" style="background: linear-gradient(to right, transparent, var(--tw-colors-primary)); clip-path: polygon(0 100%, 0 80%, 20% 60%, 40% 70%, 60% 40%, 80% 50%, 100% 20%, 100% 100%);"></div>
+<svg class="absolute bottom-0 left-0 h-full w-full stroke-primary fill-none" preserveaspectratio="none" viewbox="0 0 100 40">
+<path d="M0,32 L20,24 L40,28 L60,16 L80,20 L100,8" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+<div class="col-span-12 sm:col-span-6 lg:col-span-3 clinical-card rounded-lg p-lg flex flex-col justify-between">
+<div>
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-2 block">Avg. Review Time</span>
+<div class="font-headline-md text-headline-md text-on-surface mb-1">4.2 <span class="text-body-md text-on-surface-variant">mins</span></div>
+<div class="flex items-center gap-1 text-[12px] text-primary">
+<span class="material-symbols-outlined text-[16px]">trending_down</span>
+<span>-2.1 mins (AI Assisted)</span>
+</div>
+</div>
+<div class="mt-4 flex gap-2">
+<div class="flex-1 bg-primary h-2 rounded-full"></div>
+<div class="flex-1 bg-surface-container-highest h-2 rounded-full"></div>
+</div>
+</div>
+<div class="col-span-12 sm:col-span-6 lg:col-span-3 clinical-card rounded-lg p-lg flex flex-col justify-between border-2 border-tertiary-container ai-pulse relative overflow-hidden">
+<div class="absolute top-0 right-0 bg-tertiary-container text-on-tertiary px-2 py-1 text-[10px] font-bold rounded-bl">AI ACTIVE</div>
+<div>
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-2 block">Critical Findings Detected</span>
+<div class="font-headline-md text-headline-md text-on-surface mb-1">87</div>
+<div class="flex items-center gap-1 text-[12px] text-error">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+<span>Action Required on 12</span>
+</div>
+</div>
+</div>
+<div class="col-span-12 sm:col-span-6 lg:col-span-3 clinical-card rounded-lg p-lg flex flex-col justify-between">
+<div>
+<span class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-2 block">System Bottleneck Risk</span>
+<div class="font-headline-md text-headline-md text-on-surface mb-1">Moderate</div>
+<div class="flex items-center gap-1 text-[12px] text-on-surface-variant">
+<span>Radiology Queue: 85% capacity</span>
+</div>
+</div>
+<div class="mt-4 w-full bg-surface-container-low rounded-full h-2">
+<div class="bg-error w-[85%] h-full rounded-full"></div>
+</div>
+</div>
+<!-- Main Content Row -->
+<!-- Map Area -->
+<div class="col-span-12 lg:col-span-8 clinical-card rounded-lg flex flex-col">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Population Risk Clusters</h3>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-error-container text-on-error-container text-[10px] rounded font-bold uppercase">High Risk</span>
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] rounded font-bold uppercase">Monitoring</span>
+</div>
+</div>
+<div class="flex-1 min-h-[300px] relative bg-slate-50 p-4">
+<!-- Simplified visual representation of a map with clusters -->
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#00685f 1px, transparent 1px); background-size: 20px 20px;"></div>
+<!-- Mock Clusters -->
+<div class="absolute top-1/4 left-1/4 w-24 h-24 rounded-full bg-error-container opacity-40 animate-pulse"></div>
+<div class="absolute top-1/4 left-1/4 w-4 h-4 rounded-full bg-error transform -translate-x-1/2 -translate-y-1/2 shadow-lg"></div>
+<div class="absolute top-[22%] left-[26%] bg-surface text-on-surface text-[10px] px-2 py-1 rounded border border-outline-variant shadow">North Wing: Resp. Spike</div>
+<div class="absolute bottom-1/3 right-1/3 w-32 h-32 rounded-full bg-secondary-container opacity-40"></div>
+<div class="absolute bottom-1/3 right-1/3 w-3 h-3 rounded-full bg-secondary transform -translate-x-1/2 -translate-y-1/2"></div>
+<div class="absolute top-1/2 right-1/4 w-16 h-16 rounded-full bg-tertiary-container opacity-30"></div>
+<div class="absolute top-1/2 right-1/4 w-2 h-2 rounded-full bg-tertiary transform -translate-x-1/2 -translate-y-1/2"></div>
+</div>
+</div>
+<!-- Effectiveness Chart -->
+<div class="col-span-12 lg:col-span-4 clinical-card rounded-lg flex flex-col">
+<div class="p-lg border-b border-outline-variant">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Screening Effectiveness</h3>
+<p class="text-body-sm text-on-surface-variant">AI-Assisted vs Traditional Baseline</p>
+</div>
+<div class="p-lg flex-1 flex flex-col justify-center gap-6">
+<div>
+<div class="flex justify-between text-label-md font-label-md mb-2">
+<span class="text-on-surface">True Positive Rate (Sensitivity)</span>
+<span class="text-primary">94%</span>
+</div>
+<div class="w-full bg-surface-container-low h-3 rounded-full overflow-hidden flex">
+<div class="bg-primary w-[94%] h-full"></div>
+<div class="w-[2px] bg-white h-full relative -left-[14%] z-10" title="Traditional Baseline (80%)"></div>
+</div>
+<div class="text-[10px] text-on-surface-variant mt-1 text-right">Baseline: 80%</div>
+</div>
+<div>
+<div class="flex justify-between text-label-md font-label-md mb-2">
+<span class="text-on-surface">False Negative Rate</span>
+<span class="text-primary">2.1%</span>
+</div>
+<div class="w-full bg-surface-container-low h-3 rounded-full overflow-hidden flex">
+<div class="bg-primary w-[2.1%] h-full"></div>
+<div class="w-[2px] bg-error h-full relative left-[5%] z-10" title="Traditional Baseline (7%)"></div>
+</div>
+<div class="text-[10px] text-on-surface-variant mt-1 text-right">Baseline: 7.0%</div>
+</div>
+</div>
+</div>
+<!-- Heatmap / Table -->
+<div class="col-span-12 clinical-card rounded-lg flex flex-col overflow-hidden">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-surface">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Operational Bottlenecks (Current Hour)</h3>
+<button class="text-primary font-label-md text-label-md hover:underline">View Full Report</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-label-md font-label-md text-secondary uppercase border-b border-outline-variant">
+<th class="p-4 font-semibold">Department</th>
+<th class="p-4 font-semibold">Upload Delay</th>
+<th class="p-4 font-semibold">AI Processing</th>
+<th class="p-4 font-semibold">Physician Review Queue</th>
+<th class="p-4 font-semibold">Status</th>
+</tr>
+</thead>
+<tbody class="text-body-sm text-on-surface">
+<tr class="border-b border-outline-variant hover:bg-surface-bright transition-colors">
+<td class="p-4 font-medium">Radiology - MRI</td>
+<td class="p-4"><span class="px-2 py-1 bg-error-container text-on-error-container rounded text-[12px]">+14 mins</span></td>
+<td class="p-4 text-primary">0.8s</td>
+<td class="p-4"><div class="w-full bg-surface-container h-2 rounded"><div class="bg-error w-[90%] h-full rounded"></div></div></td>
+<td class="p-4"><span class="px-2 py-1 bg-error text-on-error rounded text-[10px] font-bold">CRITICAL</span></td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-bright transition-colors">
+<td class="p-4 font-medium">Cardiology - Echo</td>
+<td class="p-4 text-on-surface-variant">2 mins</td>
+<td class="p-4 text-primary">1.2s</td>
+<td class="p-4"><div class="w-full bg-surface-container h-2 rounded"><div class="bg-tertiary w-[40%] h-full rounded"></div></div></td>
+<td class="p-4"><span class="px-2 py-1 bg-surface-container-highest text-on-surface rounded text-[10px] font-bold">STABLE</span></td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-4 font-medium">ER - CT Scans</td>
+<td class="p-4"><span class="px-2 py-1 bg-secondary-container text-on-secondary-container rounded text-[12px]">+5 mins</span></td>
+<td class="p-4 text-primary">0.5s</td>
+<td class="p-4"><div class="w-full bg-surface-container h-2 rounded"><div class="bg-secondary w-[65%] h-full rounded"></div></div></td>
+<td class="p-4"><span class="px-2 py-1 bg-secondary-container text-on-secondary-container rounded text-[10px] font-bold">MODERATE</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
