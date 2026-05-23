@@ -51,6 +51,27 @@ export type CrmHealthRow = {
   note: string;
 };
 
+export type B2BBillingBreakdownRow = {
+  segment: string;
+  partners: string;
+  invoices: string;
+  billed: string;
+  collected: string;
+  outstanding: string;
+  overdueShare: string;
+  status: string;
+  tone: StatusTone;
+};
+
+export type B2BAgingBucket = {
+  bucket: string;
+  amount: string;
+  accounts: string;
+  trend: string;
+  tone: StatusTone;
+  note: string;
+};
+
 export const navItems = [
   { label: "Command", href: "/doctor/command-center" },
   { label: "Patients", href: "/patients" },
@@ -60,6 +81,9 @@ export const navItems = [
   { label: "CRM", href: "/crm" },
   { label: "Campaigns", href: "/crm/campaigns" },
   { label: "CRM Dashboard", href: "/crm/dashboard" },
+  { label: "B2B Partners", href: "/b2b/partners" },
+  { label: "B2B Orders", href: "/b2b/orders" },
+  { label: "B2B Billing", href: "/b2b/billing" },
   { label: "Tenants", href: "/admin/tenants" },
   { label: "User Roles", href: "/admin/users" },
   { label: "Admin Ops", href: "/admin/operations" },
@@ -255,6 +279,108 @@ export const crmWatchlist = [
     title: "Renewal window opening",
     detail: "12 existing tenants enter renewal discussions within the next 14 days."
   }
+];
+
+export const b2bBillingMetrics: Metric[] = [
+  { label: "Gross billed (MTD)", value: "INR 9.4M", trend: "+12% vs Apr" },
+  { label: "Collections posted", value: "INR 7.8M", trend: "83% realization" },
+  { label: "Outstanding", value: "INR 1.6M", trend: "INR 540k > 30 days" },
+  { label: "Dispute queue", value: "19", trend: "7 need partner follow-up" }
+];
+
+export const b2bBillingBreakdownRows: B2BBillingBreakdownRow[] = [
+  {
+    segment: "Hospital networks",
+    partners: "18 partners",
+    invoices: "204",
+    billed: "INR 4.1M",
+    collected: "INR 3.5M",
+    outstanding: "INR 640k",
+    overdueShare: "11%",
+    status: "Stable",
+    tone: "good"
+  },
+  {
+    segment: "Enterprise diagnostics",
+    partners: "26 partners",
+    invoices: "281",
+    billed: "INR 3.0M",
+    collected: "INR 2.2M",
+    outstanding: "INR 810k",
+    overdueShare: "24%",
+    status: "Watch",
+    tone: "warning"
+  },
+  {
+    segment: "Clinic chains",
+    partners: "34 partners",
+    invoices: "337",
+    billed: "INR 1.6M",
+    collected: "INR 1.3M",
+    outstanding: "INR 270k",
+    overdueShare: "15%",
+    status: "Recovering",
+    tone: "neutral"
+  },
+  {
+    segment: "Referral affiliates",
+    partners: "41 partners",
+    invoices: "158",
+    billed: "INR 780k",
+    collected: "INR 710k",
+    outstanding: "INR 70k",
+    overdueShare: "8%",
+    status: "Healthy",
+    tone: "good"
+  }
+];
+
+export const b2bAgingBuckets: B2BAgingBucket[] = [
+  {
+    bucket: "0-30 days",
+    amount: "INR 1.05M",
+    accounts: "74 partner accounts",
+    trend: "+6% this week",
+    tone: "warning",
+    note: "Most pending invoices are tied to weekly bulk reconciliations."
+  },
+  {
+    bucket: "31-60 days",
+    amount: "INR 410k",
+    accounts: "23 partner accounts",
+    trend: "-4% this week",
+    tone: "warning",
+    note: "Collections improving after rolling out consolidated statement packs."
+  },
+  {
+    bucket: "60+ days",
+    amount: "INR 130k",
+    accounts: "9 partner accounts",
+    trend: "-11% this week",
+    tone: "danger",
+    note: "Escalations are active with legal-approved payment plans."
+  }
+];
+
+export const b2bSettlementHighlights = [
+  {
+    title: "Apex Hospitals settlement posted",
+    detail: "INR 420k received across 17 invoices; 100% mapped in ledger."
+  },
+  {
+    title: "Nova Diagnostics dispute resolved",
+    detail: "Rate-card mismatch fixed and INR 96k credit note issued."
+  },
+  {
+    title: "SouthZone clinic cycle started",
+    detail: "36 invoices moved to review with payment ETA between Tue-Wed."
+  }
+];
+
+export const b2bBillingActionChecklist = [
+  "Escalate enterprise diagnostic partners with overdue share above 20%",
+  "Release weekly consolidated statements before 17:00 IST",
+  "Review unresolved disputes older than five business days"
 ];
 
 export const operationsMetrics: Metric[] = [

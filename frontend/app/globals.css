@@ -453,6 +453,10 @@ input[type="search"] {
   grid-template-columns: minmax(180px, 1.2fr) minmax(110px, 0.75fr) minmax(150px, 1fr) 90px 96px;
 }
 
+.b2b-billing-table .table-row {
+  grid-template-columns: minmax(180px, 1.1fr) 90px 110px 110px minmax(140px, 1fr) 92px;
+}
+
 .table-row div {
   display: grid;
   gap: 4px;
@@ -751,6 +755,7 @@ input[type="search"] {
   .queue-row,
   .table-row,
   .reports-table .table-row,
+  .b2b-billing-table .table-row,
   .crm-funnel-row,
   .crm-health-row {
     grid-template-columns: 1fr;

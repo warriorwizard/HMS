@@ -44,3 +44,7 @@ http://localhost:3000
   - `/crm`
   - `/crm/campaigns`
   - `/crm/dashboard`
+- B2B surfaces:
+  - `/b2b/partners`
+  - `/b2b/orders`
+  - `/b2b/billing`
