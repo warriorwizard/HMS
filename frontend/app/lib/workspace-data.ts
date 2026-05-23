@@ -89,6 +89,7 @@ export const navItems: NavItem[] = [
   { label: "B2B Partners",  href: "/b2b/partners",          requiredPermission: "billing:read" },
   { label: "B2B Orders",    href: "/b2b/orders",            requiredPermission: "billing:read" },
   { label: "B2B Billing",   href: "/b2b/billing",           requiredPermission: "billing:read" },
+  { label: "Billing Desk",  href: "/billing",               requiredPermission: "billing:read" },
   { label: "Tenants",       href: "/admin/tenants",         requiredPermission: "admin:read" },
   { label: "User Roles",    href: "/admin/users",           requiredPermission: "admin:read" },
   { label: "Admin Ops",     href: "/admin/operations",      requiredPermission: "admin:read" },

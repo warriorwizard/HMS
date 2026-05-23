@@ -11,6 +11,13 @@ export {
   fetchB2bPricingRules
 } from "./b2b";
 export { fetchCrmCampaigns, fetchCrmLeads, fetchCrmReminders } from "./crm";
+export {
+  fetchBillingInvoices,
+  fetchBillingOrders,
+  fetchBillingPayments,
+  fetchBillingServices
+} from "./billing-desk";
+export { fetchPatientTimeline, fetchPatients, fetchPatientVisits } from "./patients";
 export { fetchHealth, fetchSystemInfo } from "./system";
 export type {
   AdminMembershipResource,
@@ -37,6 +44,15 @@ export type {
   B2bPricingRulesQuery
 } from "./b2b";
 export type {
+  BillingInvoiceLineResource,
+  BillingInvoiceResource,
+  BillingOrderResource,
+  BillingPaginatedResponse,
+  BillingPagination,
+  BillingPaymentResource,
+  BillingServiceResource
+} from "./billing-desk";
+export type {
   CrmCampaignResource,
   CrmCampaignsQuery,
   CrmLeadResource,
@@ -46,6 +62,14 @@ export type {
   CrmReminderResource,
   CrmRemindersQuery
 } from "./crm";
+export type {
+  PatientPaginatedResponse,
+  PatientPagination,
+  PatientResource,
+  PatientsQuery,
+  TimelineEventResource,
+  VisitResource
+} from "./patients";
 export type { HealthResource, SystemInfoResource } from "./system";
 export type { ApiErrorCode } from "./errors";
 export type {
