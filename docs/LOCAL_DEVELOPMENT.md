@@ -95,8 +95,7 @@ All local smoke checks:
 ```
 
 ## Project Status
-Current implementation status is tracked in:
+Current implementation status is tracked in GitHub:
 
-- `project-tracker/STATUS_BOARD.md`
-- `project-tracker/CURRENT_WORK.md`
-- `project-tracker/BACKLOG.md`
+- Issues: `https://github.com/warriorwizard/HMS/issues`
+- Project board: `https://github.com/users/warriorwizard/projects`

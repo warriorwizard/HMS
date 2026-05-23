@@ -11,14 +11,12 @@ This repository is being built from the architecture pack in `docs/tarini-v6-arc
 - `packages`: shared contracts and utilities.
 - `scripts`: development and maintenance scripts.
 - `docs`: product blueprint, architecture, and implementation guides.
-- `project-tracker`: local Jira-style tracker and current work board.
 
 ## Status Tracking
-Check current implementation status in:
+Implementation tracking is managed in GitHub:
 
-- `project-tracker/STATUS_BOARD.md`
-- `project-tracker/CURRENT_WORK.md`
-- `project-tracker/BACKLOG.md`
+- Issues: `https://github.com/warriorwizard/HMS/issues`
+- Project board: `https://github.com/users/warriorwizard/projects`
 
 ## Local Development
 Use the local development guide:
