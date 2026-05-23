@@ -23,6 +23,7 @@ Last updated: 2026-05-23
 - `TAR-TRACK-004` - Add Jira/Linear/CSV export format.
 - `TAR-TRACK-005` - Create reusable LLM work-packet template.
 - `TAR-TRACK-013` - Initialize GitHub execution workflow: pushed repository to `warriorwizard/HMS`, installed GitHub plugin for Codex, and seeded issues `#1` to `#10`.
+- `TAR-TRACK-014` - Migrated all architecture tracker cards to GitHub issues (`#11` to `#31`) and published sync map in `GITHUB_SYNC.md`.
 - `TAR-FE-000` - Make initial sidebar navigation and module routes functional.
 - `TAR-FE-001` - Add typed frontend API client with auth-aware request/error handling.
 - `TAR-P0-001` - Create monorepo foundation and baseline folders.

@@ -25,6 +25,7 @@ Open these files:
 - `BACKLOG.md`: full task breakdown grouped by product area and phase.
 - `CURRENT_WORK.md`: what I am actively working on and the latest status notes.
 - `DECISIONS.md`: product and engineering decisions that affect implementation.
+- `GITHUB_SYNC.md`: mapping between local tracker IDs and GitHub issue numbers.
 
 Also check GitHub for live execution status:
 - Issue state and assignment: `https://github.com/warriorwizard/HMS/issues`
