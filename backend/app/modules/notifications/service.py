@@ -21,7 +21,7 @@ _BASE_NOTIFICATIONS: tuple[NotificationItem, ...] = (
     NotificationItem(
         id="ntf_001",
         user_id="usr_ops",
-        title="Escalation queue warning",
+        title="Escalation SLA warning",
         message="3 studies exceeded review SLA threshold.",
         channel="in_app",
         status="sent",
@@ -179,7 +179,7 @@ def list_notifications(
             (not normalized_statuses or item.status.lower() in normalized_statuses)
             and (not normalized_channels or item.channel.lower() in normalized_channels)
             and (is_read is None or item.is_read == is_read)
-            and _matches_query(search, item.id, item.title, item.message, item.user_id)
+            and _matches_query(search, item.id, item.title, item.message, item.user_id, item.status)
         )
     ]
     total = len(filtered)

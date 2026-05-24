@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 const AUTH_ENABLED = process.env.NEXT_PUBLIC_AUTH_ENABLED === "true";
 
-export function middleware(request: NextRequest): NextResponse {
+export function proxy(request: NextRequest): NextResponse {
   if (!AUTH_ENABLED) {
     return NextResponse.next();
   }
