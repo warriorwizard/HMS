@@ -104,12 +104,12 @@ function CopilotFallback({ message }: { message: string }) {
             </div>
             <div>
               <strong>Kiran Mehta lab progression</strong>
-              <span>TAR-P-1038 | RPT-8215 | trend comparison and summary draft.</span>
+              <span>PXH-P-1038 | RPT-8215 | trend comparison and summary draft.</span>
               <RiskBadge risk="High" />
             </div>
             <div>
               <strong>Nisha Patel follow-up</strong>
-              <span>TAR-P-1021 | RPT-8199 | care desk callback note.</span>
+              <span>PXH-P-1021 | RPT-8199 | care desk callback note.</span>
               <RiskBadge risk="Moderate" />
             </div>
           </div>
@@ -196,3 +196,4 @@ async function loadContext(patientId: string, reportId?: string) {
     };
   }
 }
+

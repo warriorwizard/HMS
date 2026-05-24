@@ -211,9 +211,9 @@ function MembershipDirectoryFallback({
     {
       id: "MEM-DR-MEHRA",
       user: "Dr. Anika Mehra",
-      email: "anika.mehra@tarini.example",
-      tenant: "Tarini Healthcare Intelligence",
-      tenantId: "TEN-TARINI",
+      email: "anika.mehra@proxohms.example",
+      tenant: "ProxoHMS Demo Center",
+      tenantId: "TEN-PROXOHMS",
       role: "Doctor",
       roleKey: "doctor",
       permissions: 18,
@@ -222,9 +222,9 @@ function MembershipDirectoryFallback({
     {
       id: "MEM-LAB-DSOUZA",
       user: "M. Dsouza",
-      email: "m.dsouza@tarini.example",
-      tenant: "Tarini Healthcare Intelligence",
-      tenantId: "TEN-TARINI",
+      email: "m.dsouza@proxohms.example",
+      tenant: "ProxoHMS Demo Center",
+      tenantId: "TEN-PROXOHMS",
       role: "Lab operations",
       roleKey: "technician",
       permissions: 11,
@@ -233,7 +233,7 @@ function MembershipDirectoryFallback({
     {
       id: "MEM-CARE-KAUR",
       user: "P. Kaur",
-      email: "p.kaur@tarini.example",
+      email: "p.kaur@proxohms.example",
       tenant: "Apex Hospitals Demo",
       tenantId: "TEN-APEX",
       role: "Care desk",
@@ -436,3 +436,4 @@ function describePageWindow(limit: number, offset: number, total: number): strin
   const to = Math.min(total, offset + limit);
   return `${from}-${to} of ${total} memberships`;
 }
+

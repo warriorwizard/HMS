@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 
 import type { NavItem } from "@/app/lib/workspace-data";
 
-const SIDEBAR_SCROLL_KEY = "tarini.sidebar.scrollTop";
+const SIDEBAR_SCROLL_KEY = "proxohms.sidebar.scrollTop";
 
 type SidebarNavProps = {
   activePath: string;

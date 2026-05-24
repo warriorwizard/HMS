@@ -45,7 +45,7 @@ function PacsFallback({ message }: { message: string }) {
     {
       id: "STUDY-8821",
       uid: "1.2.840.113619.2.55.3.604688432.8221",
-      patient: "TAR-P-1042",
+      patient: "PXH-P-1042",
       series: 3,
       images: 42,
       status: "available"
@@ -53,7 +53,7 @@ function PacsFallback({ message }: { message: string }) {
     {
       id: "STUDY-8799",
       uid: "1.2.840.113619.2.55.3.604688432.8799",
-      patient: "TAR-P-1021",
+      patient: "PXH-P-1021",
       series: 2,
       images: 28,
       status: "prefetching"
@@ -122,3 +122,4 @@ async function loadStudies() {
     };
   }
 }
+

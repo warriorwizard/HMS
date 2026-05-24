@@ -30,10 +30,21 @@ export function AppShell({
     <main className={hideSidebar ? "workspace workspace-no-sidebar" : "workspace"}>
       {hideSidebar ? null : (
         <aside className="sidebar">
-          <div>
-            <p className="eyebrow">Tarini V6</p>
-            <h1>Clinical Operations</h1>
+          <div className="brand-lockup">
+            <span className="proxomind-mark" aria-hidden="true">
+              <svg viewBox="0 0 72 72" role="img">
+                <path d="M18 18 46 36 18 54" />
+                <circle cx="18" cy="18" r="10" />
+                <circle cx="50" cy="36" r="10" />
+                <circle cx="18" cy="54" r="10" />
+              </svg>
+            </span>
+            <div className="brand-wordmark" aria-label="ProxoMind Labs">
+              <strong><span>Proxo</span><em>Mind</em></strong>
+              <small>LABS</small>
+            </div>
           </div>
+          <div className="product-chip">ProxoHMS</div>
           <SidebarNav activePath={activePath} items={visibleNav} />
           <details className="mobile-nav" role="navigation">
             <summary>Open Navigation</summary>
@@ -48,7 +59,7 @@ export function AppShell({
             <p className="eyebrow">{eyebrow}</p>
             <h2>{title}</h2>
           </div>
-          {rightSlot ?? <div className="tenant-chip">Apollo Demo Center</div>}
+          {rightSlot ?? <div className="tenant-chip">ProxoHMS Care Center</div>}
         </header>
         {children}
       </section>

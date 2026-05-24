@@ -1,4 +1,4 @@
-# Tarini V6 Frontend
+# ProxoHMS Frontend
 
 This folder will contain the Next.js and TypeScript application.
 
@@ -14,7 +14,7 @@ Primary surfaces:
 - Analytics and executive dashboards.
 
 Architecture reference:
-- `../docs/tarini-v6-architecture/17_FRONTEND_UI_ARCHITECTURE.md`
+- `../docs/`
 
 ## Local Run
 From this folder:
@@ -33,7 +33,7 @@ http://localhost:3000
 ## Current Skeleton
 - Next.js App Router setup.
 - TypeScript configuration.
-- Initial clinical operations workspace at `/`.
+- Proxomind Labs branded hospital operations workspace at `/`.
 - Global CSS foundation for dense operational UI.
 - Admin console surfaces:
   - `/admin/tenants`

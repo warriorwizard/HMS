@@ -165,9 +165,9 @@ function TenantDirectoryFallback({
 }) {
   const tenants = [
     {
-      id: "TEN-TARINI",
-      name: "Tarini Healthcare Intelligence",
-      slug: "tarini-healthcare",
+      id: "TEN-PROXOHMS",
+      name: "ProxoHMS Demo Center",
+      slug: "proxohms-demo",
       status: "active",
       coverage: "3 sites | 8 departments | 124 memberships"
     },
@@ -305,3 +305,4 @@ function toNonNegativeNumber(value: number | undefined): number | null {
 
   return Math.trunc(value);
 }
+

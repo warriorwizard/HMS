@@ -116,7 +116,9 @@ export function detailsFromErrorBody(body: unknown): unknown {
 }
 
 export function requestIdFromHeadersOrBody(headers: Headers, body: unknown): string | undefined {
-  const headerValue = headers.get("x-request-id") ?? headers.get("x-tarini-request-id");
+  const headerValue =
+    headers.get("x-request-id") ??
+    headers.get("x-proxohms-request-id");
   if (headerValue) {
     return headerValue;
   }
@@ -125,7 +127,9 @@ export function requestIdFromHeadersOrBody(headers: Headers, body: unknown): str
 }
 
 export function correlationIdFromHeadersOrBody(headers: Headers, body: unknown): string | undefined {
-  const headerValue = headers.get("x-correlation-id") ?? headers.get("x-tarini-correlation-id");
+  const headerValue =
+    headers.get("x-correlation-id") ??
+    headers.get("x-proxohms-correlation-id");
   if (headerValue) {
     return headerValue;
   }
@@ -159,4 +163,3 @@ function isJsonObject(value: unknown): value is JsonObject {
 function isAbortError(error: unknown): boolean {
   return error instanceof DOMException && error.name === "AbortError";
 }
-

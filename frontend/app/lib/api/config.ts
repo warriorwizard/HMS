@@ -5,7 +5,7 @@ function trimTrailingSlash(value: string): string {
 }
 
 export function getApiBaseUrl(): string {
-  return trimTrailingSlash(process.env.NEXT_PUBLIC_TARINI_API_BASE_URL ?? DEFAULT_API_BASE_URL);
+  return trimTrailingSlash(process.env.NEXT_PUBLIC_PROXOHMS_API_BASE_URL ?? DEFAULT_API_BASE_URL);
 }
 
 export function joinApiUrl(baseUrl: string, path: string): string {
@@ -18,4 +18,3 @@ export function joinApiUrl(baseUrl: string, path: string): string {
 
   return `${normalizedBaseUrl}${normalizedPath}`;
 }
-

@@ -150,7 +150,7 @@ export const workflowSteps = [
 
 export const patients = [
   {
-    id: "TAR-P-1042",
+    id: "PXH-P-1042",
     name: "Asha Rao",
     age: 54,
     sex: "F",
@@ -160,7 +160,7 @@ export const patients = [
     nextAction: "Doctor review"
   },
   {
-    id: "TAR-P-1038",
+    id: "PXH-P-1038",
     name: "Kiran Mehta",
     age: 61,
     sex: "M",
@@ -170,7 +170,7 @@ export const patients = [
     nextAction: "Compare labs"
   },
   {
-    id: "TAR-P-1021",
+    id: "PXH-P-1021",
     name: "Nisha Patel",
     age: 38,
     sex: "F",
@@ -180,7 +180,7 @@ export const patients = [
     nextAction: "Follow-up call"
   },
   {
-    id: "TAR-P-1009",
+    id: "PXH-P-1009",
     name: "Omar Khan",
     age: 46,
     sex: "M",
@@ -558,7 +558,7 @@ export const adminConfigurationSections: AdminConfigurationSection[] = [
 export const settingsGroups = [
   {
     title: "Tenant setup",
-    items: ["Apollo Demo Center", "India time zone", "Clinical review mode enabled"]
+    items: ["ProxoHMS Care Center", "India time zone", "Clinical review mode enabled"]
   },
   {
     title: "Role permissions",
@@ -569,3 +569,4 @@ export const settingsGroups = [
     items: ["Human approval required", "Source-linked outputs only", "Audit logging active"]
   }
 ];
+
