@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { SidebarNav } from "@/app/components/sidebar-nav";
 import { filterNavByPermissions } from "@/app/lib/permissions";
 import { navItems } from "@/app/lib/workspace-data";
 
@@ -34,30 +34,10 @@ export function AppShell({
             <p className="eyebrow">Tarini V6</p>
             <h1>Clinical Operations</h1>
           </div>
-          <nav aria-label="Primary navigation" className="primary-nav desktop-nav">
-            {visibleNav.map((item) => {
-              const isActive = activePath === item.href;
-
-              return (
-                <Link className={isActive ? "active" : ""} href={item.href} key={item.href}>
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
+          <SidebarNav activePath={activePath} items={visibleNav} />
           <details className="mobile-nav" role="navigation">
             <summary>Open Navigation</summary>
-            <nav aria-label="Mobile navigation" className="primary-nav mobile-nav-links">
-              {visibleNav.map((item) => {
-                const isActive = activePath === item.href;
-
-                return (
-                  <Link className={isActive ? "active" : ""} href={item.href} key={`mobile-${item.href}`}>
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </nav>
+            <SidebarNav activePath={activePath} items={visibleNav} variant="mobile" />
           </details>
         </aside>
       )}

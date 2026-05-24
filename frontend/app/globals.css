@@ -28,6 +28,7 @@ a {
 }
 
 .workspace {
+  align-items: start;
   display: grid;
   grid-template-columns: 248px 1fr;
   min-height: 100vh;
@@ -43,7 +44,13 @@ a {
   gap: 36px;
   border-right: 1px solid var(--line);
   background: #ffffff;
+  height: 100vh;
+  max-height: 100vh;
+  min-height: 0;
+  overflow: hidden;
   padding: 28px 20px;
+  position: sticky;
+  top: 0;
 }
 
 .eyebrow {
@@ -86,6 +93,12 @@ nav {
 
 .desktop-nav {
   display: grid;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scrollbar-gutter: stable;
 }
 
 .mobile-nav {
@@ -771,6 +784,10 @@ input[type="search"] {
     gap: 16px;
     border-bottom: 1px solid var(--line);
     border-right: 0;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    position: static;
   }
 
   .desktop-nav {
