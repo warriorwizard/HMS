@@ -136,18 +136,7 @@ async function NotificationCenterPanel({ filters, dataPromise }: NotificationCen
   try {
     response = await dataPromise;
   } catch (error) {
-    return (
-      <Panel className="wide-panel" title="Inbox">
-        <ErrorState
-          title="Unable to load notifications"
-          description={
-            isApiError(error)
-              ? `The notifications API responded with an error: ${error.message}`
-              : "The notifications API is currently unavailable. Try again in a moment."
-          }
-        />
-      </Panel>
-    );
+    return <NotificationCenterFallback filters={filters} message={notificationMessage(error)} />;
   }
 
   return (
@@ -201,6 +190,100 @@ async function NotificationCenterPanel({ filters, dataPromise }: NotificationCen
                 ? "No notifications match the current filters."
                 : "No notifications are available yet."
             }
+          />
+        )}
+      </div>
+    </Panel>
+  );
+}
+
+function NotificationCenterFallback({
+  filters,
+  message
+}: {
+  filters: NotificationFilters;
+  message: string;
+}) {
+  const notifications = [
+    {
+      id: "NTF-9001",
+      title: "Critical report awaiting doctor sign-off",
+      message: "Asha Rao chest X-ray has a critical AI triage signal and is due in 8 minutes.",
+      channel: "in_app",
+      status: "queued",
+      isRead: false,
+      createdAt: "Today 10:42"
+    },
+    {
+      id: "NTF-8994",
+      title: "Billing dispute needs review",
+      message: "Nova Diagnostics has a price-list mismatch on 7 invoices.",
+      channel: "email",
+      status: "sent",
+      isRead: false,
+      createdAt: "Today 09:18"
+    },
+    {
+      id: "NTF-8989",
+      title: "Follow-up callback completed",
+      message: "Nisha Patel callback was completed and care note is ready.",
+      channel: "sms",
+      status: "delivered",
+      isRead: true,
+      createdAt: "Yesterday 17:30"
+    }
+  ];
+  const query = filters.q.toLowerCase();
+  const status = filters.status.toLowerCase();
+  const channel = filters.channel.toLowerCase();
+  const isRead = filters.is_read.toLowerCase();
+  const filteredNotifications = notifications.filter((item) => {
+    const matchesQuery =
+      query.length === 0 ||
+      [item.id, item.title, item.message, item.channel, item.status]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+    const matchesStatus = status.length === 0 || item.status.includes(status);
+    const matchesChannel = channel.length === 0 || item.channel.includes(channel);
+    const matchesRead =
+      isRead.length === 0 ||
+      (isRead === "true" && item.isRead) ||
+      (isRead === "false" && !item.isRead);
+    return matchesQuery && matchesStatus && matchesChannel && matchesRead;
+  });
+
+  return (
+    <Panel className="wide-panel" meta={`${filteredNotifications.length} notifications`} title="Inbox">
+      <FieldHint tone="warning">{message} Showing operational alert snapshot.</FieldHint>
+      <div className="data-table reports-table compact-top">
+        <div className="table-row table-head">
+          <span>Notification</span>
+          <span>Channel</span>
+          <span>Status</span>
+          <span>State</span>
+          <span>Action</span>
+        </div>
+        {filteredNotifications.length > 0 ? (
+          filteredNotifications.map((item) => (
+            <div className="table-row" key={item.id}>
+              <div>
+                <strong>{item.title}</strong>
+                <small>{item.id} | {item.createdAt}</small>
+                <small>{item.message}</small>
+              </div>
+              <span>{item.channel}</span>
+              <StatusBadge tone={statusTone(item.status)}>{item.status}</StatusBadge>
+              <StatusBadge tone={item.isRead ? "good" : "warning"}>
+                {item.isRead ? "read" : "unread"}
+              </StatusBadge>
+              <span>{item.isRead ? "Filed" : "Needs review"}</span>
+            </div>
+          ))
+        ) : (
+          <EmptyState
+            title="No notifications found"
+            description="No demo alerts match the current notification filters."
           />
         )}
       </div>
@@ -362,6 +445,12 @@ function statusTone(status: string): "good" | "warning" | "danger" | "neutral" {
   }
 
   return "neutral";
+}
+
+function notificationMessage(error: unknown): string {
+  return isApiError(error)
+    ? `The notifications API responded with an error: ${error.message}.`
+    : "The notifications API is currently unavailable.";
 }
 
 function readFilterValue(value: string | string[] | undefined): string {

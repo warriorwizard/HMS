@@ -1,5 +1,5 @@
 import { AppShell } from "@/app/components/app-shell";
-import { ErrorState, FieldHint, Panel, StatusBadge } from "@/app/components/workspace-ui";
+import { FieldHint, Panel, StatusBadge } from "@/app/components/workspace-ui";
 import { fetchHealth, fetchSystemInfo, isApiError } from "@/app/lib/api";
 import { fetchTenantSettings, type TenantSettingsResource } from "@/app/lib/api/settings";
 import { settingsGroups } from "@/app/lib/workspace-data";
@@ -96,7 +96,7 @@ export default async function SettingsPage() {
               <div><span>Slug</span><strong>{tenantSettings.slug}</strong></div>
               <div>
                 <span>Timezone</span>
-                <strong>{String(tenantSettings.settings.timezone ?? "—")}</strong>
+                <strong>{String(tenantSettings.settings.timezone ?? "-")}</strong>
               </div>
             </div>
           </Panel>
@@ -157,14 +157,7 @@ export default async function SettingsPage() {
               <strong>Required for clinical actions</strong>
             </div>
           </div>
-          {fallbackMessage ? (
-            <ErrorState
-              title="Live backend check degraded"
-              description="Settings will continue using available values while connectivity is restored."
-            >
-              <FieldHint tone="warning">{fallbackMessage}</FieldHint>
-            </ErrorState>
-          ) : null}
+          {fallbackMessage ? <FieldHint tone="warning">{fallbackMessage}</FieldHint> : null}
         </Panel>
 
         <Panel title="Readiness Checklist">

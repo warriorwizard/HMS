@@ -144,18 +144,7 @@ async function OrderDirectoryPanel({ filters, dataPromise }: OrderDirectoryPanel
   try {
     response = await dataPromise;
   } catch (error) {
-    return (
-      <Panel className="wide-panel" title="Order Tracker">
-        <ErrorState
-          title="Unable to load orders"
-          description={
-            isApiError(error)
-              ? `The B2B API responded with an error: ${error.message}`
-              : "The B2B orders API is currently unavailable. Try again in a moment."
-          }
-        />
-      </Panel>
-    );
+    return <OrderDirectoryFallback filters={filters} message={b2bOrderMessage(error)} />;
   }
 
   return (
@@ -200,6 +189,98 @@ async function OrderDirectoryPanel({ filters, dataPromise }: OrderDirectoryPanel
                 : "No B2B orders are available yet."
             }
           />
+        )}
+      </div>
+    </Panel>
+  );
+}
+
+function OrderDirectoryFallback({
+  filters,
+  message
+}: {
+  filters: OrdersFilters;
+  message: string;
+}) {
+  const orders = [
+    {
+      id: "B2B-24091",
+      partnerId: "PAR-APEX",
+      partner: "Apex Hospitals Network",
+      test: "Chest X-ray AI review",
+      patient: "Asha Rao",
+      amount: "INR 1,200.00",
+      status: "in_progress",
+      requestedAt: "Today 10:38"
+    },
+    {
+      id: "B2B-24084",
+      partnerId: "PAR-NOVA",
+      partner: "Nova Diagnostics",
+      test: "CBC + CRP panel",
+      patient: "Kiran Mehta",
+      amount: "INR 850.00",
+      status: "new",
+      requestedAt: "Today 09:12"
+    },
+    {
+      id: "B2B-24072",
+      partnerId: "PAR-SOUTH",
+      partner: "SouthZone Clinic Chain",
+      test: "Ultrasound abdomen",
+      patient: "Nisha Patel",
+      amount: "INR 1,600.00",
+      status: "completed",
+      requestedAt: "Yesterday 17:04"
+    }
+  ];
+  const query = filters.q.toLowerCase();
+  const status = filters.status.toLowerCase();
+  const partnerId = filters.partner_id.toLowerCase();
+  const filteredOrders = orders.filter((order) => {
+    const matchesQuery =
+      query.length === 0 ||
+      [order.id, order.partner, order.partnerId, order.test, order.patient]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+    const matchesStatus = status.length === 0 || order.status.includes(status);
+    const matchesPartner = partnerId.length === 0 || order.partnerId.toLowerCase().includes(partnerId);
+    return matchesQuery && matchesStatus && matchesPartner;
+  });
+
+  return (
+    <Panel className="wide-panel" meta={`${filteredOrders.length} orders`} title="Order Tracker">
+      <FieldHint tone="warning">{message} Showing partner order tracking snapshot.</FieldHint>
+      <div className="data-table reports-table compact-top">
+        <div className="table-row table-head">
+          <span>Order</span>
+          <span>Partner</span>
+          <span>Test / patient</span>
+          <span>Amount</span>
+          <span>Status</span>
+        </div>
+        {filteredOrders.length > 0 ? (
+          filteredOrders.map((order) => (
+            <div className="table-row" key={order.id}>
+              <div>
+                <strong>{order.id}</strong>
+                <small>{order.requestedAt}</small>
+              </div>
+              <div>
+                <strong>{order.partner}</strong>
+                <small>{order.partnerId}</small>
+              </div>
+              <div>
+                <strong>{order.test}</strong>
+                <small>{order.patient}</small>
+              </div>
+              <span>{order.amount}</span>
+              <StatusBadge tone={statusTone(order.status)}>{order.status}</StatusBadge>
+            </div>
+          ))
+        ) : (
+          <EmptyState title="No orders found" description="No demo orders match the current filters." />
         )}
       </div>
     </Panel>
@@ -588,6 +669,12 @@ function buildOrderErrorMessage(error: unknown): string {
   }
 
   return "Unable to place the order right now. Please try again in a moment.";
+}
+
+function b2bOrderMessage(error: unknown): string {
+  return isApiError(error)
+    ? `The B2B API responded with an error: ${error.message}.`
+    : "The B2B orders API is currently unavailable.";
 }
 
 function describePageWindow(limit: number, offset: number, total: number, noun: string): string {

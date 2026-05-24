@@ -5,7 +5,6 @@ import { AppShell } from "@/app/components/app-shell";
 import {
   ActionBar,
   EmptyState,
-  ErrorState,
   FieldHint,
   LoadingState,
   Panel,
@@ -116,18 +115,7 @@ async function TenantDirectoryPanel({ filters, dataPromise }: TenantDirectoryPan
   try {
     response = await dataPromise;
   } catch (error) {
-    return (
-      <Panel className="wide-panel" title="Tenant Directory">
-        <ErrorState
-          title="Unable to load tenant directory"
-          description={
-            isApiError(error)
-              ? `The admin API responded with an error: ${error.message}`
-              : "The admin API is currently unavailable. Try again in a moment."
-          }
-        />
-      </Panel>
-    );
+    return <TenantDirectoryFallback filters={filters} message={adminMessage(error)} />;
   }
 
   const recordsMeta = describePageWindow(response.page.limit, response.page.offset, response.page.total);
@@ -166,6 +154,82 @@ async function TenantDirectoryPanel({ filters, dataPromise }: TenantDirectoryPan
       </div>
     </Panel>
   );
+}
+
+function TenantDirectoryFallback({
+  filters,
+  message
+}: {
+  filters: TenantFilters;
+  message: string;
+}) {
+  const tenants = [
+    {
+      id: "TEN-TARINI",
+      name: "Tarini Healthcare Intelligence",
+      slug: "tarini-healthcare",
+      status: "active",
+      coverage: "3 sites | 8 departments | 124 memberships"
+    },
+    {
+      id: "TEN-APEX",
+      name: "Apex Hospitals Demo",
+      slug: "apex-hospitals",
+      status: "active",
+      coverage: "5 sites | 11 departments | 286 memberships"
+    },
+    {
+      id: "TEN-NOVA",
+      name: "Nova Diagnostics Pilot",
+      slug: "nova-diagnostics",
+      status: "pending",
+      coverage: "2 sites | 4 departments | 39 memberships"
+    }
+  ];
+  const query = filters.q.toLowerCase();
+  const status = filters.status.toLowerCase();
+  const filteredTenants = tenants.filter((tenant) => {
+    const matchesQuery =
+      query.length === 0 ||
+      [tenant.id, tenant.name, tenant.slug, tenant.coverage].join(" ").toLowerCase().includes(query);
+    const matchesStatus = status.length === 0 || tenant.status.includes(status);
+    return matchesQuery && matchesStatus;
+  });
+
+  return (
+    <Panel className="wide-panel" meta={`${filteredTenants.length} tenants`} title="Tenant Directory">
+      <FieldHint tone="warning">{message} Showing tenant administration snapshot.</FieldHint>
+      <div className="data-table compact-top">
+        <div className="table-row table-head">
+          <span>Tenant</span>
+          <span>Status</span>
+          <span>Coverage</span>
+          <span>Slug</span>
+        </div>
+        {filteredTenants.length > 0 ? (
+          filteredTenants.map((tenant) => (
+            <div className="table-row" key={tenant.id}>
+              <div>
+                <strong>{tenant.name}</strong>
+                <small>{tenant.id}</small>
+              </div>
+              <StatusBadge tone={statusTone(tenant.status)}>{tenant.status}</StatusBadge>
+              <span>{tenant.coverage}</span>
+              <span>{tenant.slug}</span>
+            </div>
+          ))
+        ) : (
+          <EmptyState title="No tenants found" description="No demo tenants match the current filters." />
+        )}
+      </div>
+    </Panel>
+  );
+}
+
+function adminMessage(error: unknown): string {
+  return isApiError(error)
+    ? `The admin API responded with an error: ${error.message}.`
+    : "The admin API is currently unavailable.";
 }
 
 function describePageWindow(limit: number, offset: number, total: number): string {

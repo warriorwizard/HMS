@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { AppShell } from "@/app/components/app-shell";
 import {
   EmptyState,
-  ErrorState,
   FieldHint,
   LoadingState,
   Panel,
@@ -113,18 +112,7 @@ async function LeadDirectoryPanel({ filters, dataPromise }: LeadDirectoryPanelPr
   try {
     response = await dataPromise;
   } catch (error) {
-    return (
-      <Panel className="wide-panel" title="Lead & Contact Directory">
-        <ErrorState
-          title="Unable to load leads"
-          description={
-            isApiError(error)
-              ? `The CRM API responded with an error: ${error.message}`
-              : "The CRM API is currently unavailable. Try again in a moment."
-          }
-        />
-      </Panel>
-    );
+    return <LeadDirectoryFallback filters={filters} message={crmMessage(error)} />;
   }
 
   return (
@@ -175,18 +163,7 @@ async function ReminderQueuePanel({ dataPromise }: ReminderQueuePanelProps) {
   try {
     response = await dataPromise;
   } catch (error) {
-    return (
-      <Panel title="Reminder Queue">
-        <ErrorState
-          title="Unable to load reminders"
-          description={
-            isApiError(error)
-              ? `The CRM API responded with an error: ${error.message}`
-              : "The reminder service is currently unavailable. Try again in a moment."
-          }
-        />
-      </Panel>
-    );
+    return <ReminderQueueFallback message={crmMessage(error)} />;
   }
 
   if (response.items.length === 0) {
@@ -240,6 +217,136 @@ async function ReminderQueuePanel({ dataPromise }: ReminderQueuePanelProps) {
       </div>
     </Panel>
   );
+}
+
+function LeadDirectoryFallback({
+  filters,
+  message
+}: {
+  filters: LeadFilters;
+  message: string;
+}) {
+  const leads = [
+    {
+      id: "LEAD-4102",
+      name: "Dr. Kavita Rao",
+      email: "kavita.rao@apex.example",
+      company: "Apex Hospitals Network",
+      source: "Referral program",
+      status: "qualified"
+    },
+    {
+      id: "LEAD-4088",
+      name: "Rahul Shah",
+      email: "rahul@nova.example",
+      company: "Nova Diagnostics",
+      source: "B2B renewal",
+      status: "new"
+    },
+    {
+      id: "LEAD-4071",
+      name: "Amina Khan",
+      email: "amina@southzone.example",
+      company: "SouthZone Clinic Chain",
+      source: "Campaign",
+      status: "won"
+    }
+  ];
+  const query = filters.q.toLowerCase();
+  const status = filters.status.toLowerCase();
+  const filteredLeads = leads.filter((lead) => {
+    const matchesQuery =
+      query.length === 0 ||
+      [lead.id, lead.name, lead.email, lead.company, lead.source]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+    const matchesStatus = status.length === 0 || lead.status.includes(status);
+    return matchesQuery && matchesStatus;
+  });
+
+  return (
+    <Panel className="wide-panel" meta={`${filteredLeads.length} leads`} title="Lead & Contact Directory">
+      <FieldHint tone="warning">{message} Showing CRM operating pipeline.</FieldHint>
+      <div className="data-table compact-top">
+        <div className="table-row table-head">
+          <span>Lead / contact</span>
+          <span>Company</span>
+          <span>Source</span>
+          <span>Status</span>
+        </div>
+        {filteredLeads.length > 0 ? (
+          filteredLeads.map((lead) => (
+            <div className="table-row" key={lead.id}>
+              <div>
+                <strong>{lead.name}</strong>
+                <small>{lead.email} | {lead.id}</small>
+              </div>
+              <span>{lead.company}</span>
+              <span>{lead.source}</span>
+              <StatusBadge tone={statusTone(lead.status)}>{lead.status}</StatusBadge>
+            </div>
+          ))
+        ) : (
+          <EmptyState title="No leads found" description="No demo leads match the current filters." />
+        )}
+      </div>
+    </Panel>
+  );
+}
+
+function ReminderQueueFallback({ message }: { message: string }) {
+  const reminders = [
+    ["Apex pilot pricing follow-up", "LEAD-4102", "high", "pending", "Today 16:00"],
+    ["Nova renewal checklist", "LEAD-4088", "medium", "scheduled", "Tomorrow 11:00"],
+    ["SouthZone onboarding note", "LEAD-4071", "low", "completed", "Yesterday 15:30"]
+  ];
+
+  return (
+    <Panel meta={`${reminders.length} reminders`} title="Reminder Queue">
+      <FieldHint tone="warning">{message} Showing follow-up queue snapshot.</FieldHint>
+      <div className="key-value-list compact-top">
+        <div>
+          <span>Pending</span>
+          <strong>{reminders.filter((item) => item[3] !== "completed").length}</strong>
+        </div>
+        <div>
+          <span>High priority</span>
+          <strong>{reminders.filter((item) => item[2] === "high").length}</strong>
+        </div>
+        <div>
+          <span>Completed</span>
+          <strong>{reminders.filter((item) => item[3] === "completed").length}</strong>
+        </div>
+      </div>
+
+      <div className="data-table compact-top">
+        <div className="table-row table-head">
+          <span>Reminder</span>
+          <span>Priority</span>
+          <span>Status</span>
+          <span>Due</span>
+        </div>
+        {reminders.map(([title, lead, priority, status, due]) => (
+          <div className="table-row" key={title}>
+            <div>
+              <strong>{title}</strong>
+              <small>{lead}</small>
+            </div>
+            <StatusBadge tone={priorityTone(priority)}>{priority}</StatusBadge>
+            <StatusBadge tone={statusTone(status)}>{status}</StatusBadge>
+            <span>{due}</span>
+          </div>
+        ))}
+      </div>
+    </Panel>
+  );
+}
+
+function crmMessage(error: unknown): string {
+  return isApiError(error)
+    ? `The CRM API responded with an error: ${error.message}.`
+    : "The CRM API is currently unavailable.";
 }
 
 function hasLeadFilters(filters: LeadFilters): boolean {

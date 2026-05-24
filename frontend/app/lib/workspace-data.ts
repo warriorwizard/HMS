@@ -78,7 +78,6 @@ export type B2BAgingBucket = {
 
 export const navItems: NavItem[] = [
   { label: "Command",       href: "/doctor/command-center", requiredPermission: "patients:read" },
-  { label: "Patient Portal", href: "/patient-portal",       requiredPermission: "patients:read" },
   { label: "Patients",      href: "/patients",              requiredPermission: "patients:read" },
   { label: "Reports",       href: "/reports",               requiredPermission: "reports:read" },
   { label: "Workflow",      href: "/workflow",              requiredPermission: "workflow:read" },

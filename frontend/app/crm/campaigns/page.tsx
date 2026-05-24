@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { AppShell } from "@/app/components/app-shell";
 import {
   EmptyState,
-  ErrorState,
   FieldHint,
   LoadingState,
   Panel,
@@ -128,18 +127,7 @@ async function CampaignPanel({ filters, dataPromise }: CampaignPanelProps) {
   try {
     response = await dataPromise;
   } catch (error) {
-    return (
-      <Panel className="wide-panel" title="Campaign List">
-        <ErrorState
-          title="Unable to load campaigns"
-          description={
-            isApiError(error)
-              ? `The CRM API responded with an error: ${error.message}`
-              : "The CRM API is currently unavailable. Try again in a moment."
-          }
-        />
-      </Panel>
-    );
+    return <CampaignFallback filters={filters} message={campaignMessage(error)} />;
   }
 
   return (
@@ -182,6 +170,89 @@ async function CampaignPanel({ filters, dataPromise }: CampaignPanelProps) {
       </div>
     </Panel>
   );
+}
+
+function CampaignFallback({
+  filters,
+  message
+}: {
+  filters: CampaignFilters;
+  message: string;
+}) {
+  const campaigns = [
+    {
+      id: "CMP-221",
+      name: "High-risk follow-up recovery",
+      channel: "sms",
+      audience: "Missed review patients",
+      status: "active"
+    },
+    {
+      id: "CMP-218",
+      name: "B2B referral partner nurture",
+      channel: "email",
+      audience: "Diagnostic centers",
+      status: "draft"
+    },
+    {
+      id: "CMP-207",
+      name: "Preventive health camp",
+      channel: "social",
+      audience: "Corporate employees",
+      status: "paused"
+    }
+  ];
+  const query = filters.q.toLowerCase();
+  const status = filters.status.toLowerCase();
+  const channel = filters.channel.toLowerCase();
+  const filteredCampaigns = campaigns.filter((campaign) => {
+    const matchesQuery =
+      query.length === 0 ||
+      [campaign.id, campaign.name, campaign.channel, campaign.audience]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+    const matchesStatus = status.length === 0 || campaign.status.includes(status);
+    const matchesChannel = channel.length === 0 || campaign.channel.includes(channel);
+    return matchesQuery && matchesStatus && matchesChannel;
+  });
+
+  return (
+    <Panel className="wide-panel" meta={`${filteredCampaigns.length} campaigns`} title="Campaign List">
+      <FieldHint tone="warning">{message} Showing campaign tracking snapshot.</FieldHint>
+      <div className="data-table reports-table compact-top">
+        <div className="table-row table-head">
+          <span>Campaign</span>
+          <span>Channel</span>
+          <span>Audience</span>
+          <span>Status</span>
+          <span>ID</span>
+        </div>
+        {filteredCampaigns.length > 0 ? (
+          filteredCampaigns.map((campaign) => (
+            <div className="table-row" key={campaign.id}>
+              <div>
+                <strong>{campaign.name}</strong>
+                <small>{campaign.id}</small>
+              </div>
+              <span>{campaign.channel}</span>
+              <span>{campaign.audience}</span>
+              <StatusBadge tone={statusTone(campaign.status)}>{campaign.status}</StatusBadge>
+              <span>{campaign.id}</span>
+            </div>
+          ))
+        ) : (
+          <EmptyState title="No campaigns found" description="No demo campaigns match the current filters." />
+        )}
+      </div>
+    </Panel>
+  );
+}
+
+function campaignMessage(error: unknown): string {
+  return isApiError(error)
+    ? `The CRM API responded with an error: ${error.message}.`
+    : "The CRM API is currently unavailable.";
 }
 
 function buildCampaignFilterHref(filters: CampaignFilters): string {

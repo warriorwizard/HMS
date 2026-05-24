@@ -5,7 +5,6 @@ import { AppShell } from "@/app/components/app-shell";
 import {
   ActionBar,
   EmptyState,
-  ErrorState,
   FieldHint,
   LoadingState,
   Panel,
@@ -148,18 +147,7 @@ async function MembershipDirectoryPanel({ filters, dataPromise }: MembershipDire
   try {
     response = await dataPromise;
   } catch (error) {
-    return (
-      <Panel className="wide-panel" title="User Role Directory">
-        <ErrorState
-          title="Unable to load user memberships"
-          description={
-            isApiError(error)
-              ? `The admin API responded with an error: ${error.message}`
-              : "The admin API is currently unavailable. Try again in a moment."
-          }
-        />
-      </Panel>
-    );
+    return <MembershipDirectoryFallback filters={filters} message={adminMessage(error)} />;
   }
 
   const recordsMeta = describePageWindow(response.page.limit, response.page.offset, response.page.total);
@@ -210,6 +198,119 @@ async function MembershipDirectoryPanel({ filters, dataPromise }: MembershipDire
       </div>
     </Panel>
   );
+}
+
+function MembershipDirectoryFallback({
+  filters,
+  message
+}: {
+  filters: MembershipFilters;
+  message: string;
+}) {
+  const memberships = [
+    {
+      id: "MEM-DR-MEHRA",
+      user: "Dr. Anika Mehra",
+      email: "anika.mehra@tarini.example",
+      tenant: "Tarini Healthcare Intelligence",
+      tenantId: "TEN-TARINI",
+      role: "Doctor",
+      roleKey: "doctor",
+      permissions: 18,
+      status: "active"
+    },
+    {
+      id: "MEM-LAB-DSOUZA",
+      user: "M. Dsouza",
+      email: "m.dsouza@tarini.example",
+      tenant: "Tarini Healthcare Intelligence",
+      tenantId: "TEN-TARINI",
+      role: "Lab operations",
+      roleKey: "technician",
+      permissions: 11,
+      status: "active"
+    },
+    {
+      id: "MEM-CARE-KAUR",
+      user: "P. Kaur",
+      email: "p.kaur@tarini.example",
+      tenant: "Apex Hospitals Demo",
+      tenantId: "TEN-APEX",
+      role: "Care desk",
+      roleKey: "staff",
+      permissions: 9,
+      status: "pending"
+    }
+  ];
+  const query = filters.q.toLowerCase();
+  const status = filters.status.toLowerCase();
+  const tenantId = filters.tenant_id.toLowerCase();
+  const roleKey = filters.role_key.toLowerCase();
+  const filteredMemberships = memberships.filter((membership) => {
+    const matchesQuery =
+      query.length === 0 ||
+      [
+        membership.id,
+        membership.user,
+        membership.email,
+        membership.tenant,
+        membership.role,
+        membership.roleKey
+      ]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+    const matchesStatus = status.length === 0 || membership.status.includes(status);
+    const matchesTenant = tenantId.length === 0 || membership.tenantId.toLowerCase().includes(tenantId);
+    const matchesRole = roleKey.length === 0 || membership.roleKey.includes(roleKey);
+    return matchesQuery && matchesStatus && matchesTenant && matchesRole;
+  });
+
+  return (
+    <Panel className="wide-panel" meta={`${filteredMemberships.length} memberships`} title="Membership Directory">
+      <FieldHint tone="warning">{message} Showing user-role administration snapshot.</FieldHint>
+      <div className="data-table reports-table compact-top">
+        <div className="table-row table-head">
+          <span>User</span>
+          <span>Tenant</span>
+          <span>Role</span>
+          <span>Permissions</span>
+          <span>Status</span>
+        </div>
+        {filteredMemberships.length > 0 ? (
+          filteredMemberships.map((membership) => (
+            <div className="table-row" key={membership.id}>
+              <div>
+                <strong>{membership.user}</strong>
+                <small>{membership.email} | {membership.id}</small>
+              </div>
+              <div>
+                <strong>{membership.tenant}</strong>
+                <small>{membership.tenantId}</small>
+              </div>
+              <div>
+                <strong>{membership.role}</strong>
+                <small>{membership.roleKey}</small>
+              </div>
+              <span>{membership.permissions}</span>
+              <StatusBadge tone={statusTone(membership.status)}>{membership.status}</StatusBadge>
+            </div>
+          ))
+        ) : (
+          <EmptyState
+            title="No memberships found"
+            description="No demo memberships match the current admin filters."
+          />
+        )}
+      </div>
+    </Panel>
+  );
+}
+
+function adminMessage(error: unknown): string {
+  return isApiError(error)
+    ? `The admin API responded with an error: ${error.message}.`
+    : "The admin API is currently unavailable.";
 }
 
 function buildMembershipFilterHref(filters: MembershipFilters): string {

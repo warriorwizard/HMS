@@ -762,107 +762,6 @@ input[type="search"] {
   margin-top: 0;
 }
 
-.figma-screen-root {
-  background: #08111f;
-  min-height: 100vh;
-  width: 100%;
-}
-
-.figma-screen-root-image {
-  align-items: flex-start;
-  display: flex;
-  justify-content: center;
-  padding: 0;
-}
-
-.figma-screen-frame {
-  background: #ffffff;
-  border: 0;
-  display: block;
-  height: 100vh;
-  width: 100%;
-}
-
-.figma-screen-image {
-  display: block;
-  height: auto;
-  max-width: 100%;
-  width: min(100%, 1920px);
-}
-
-.figma-screen-panel {
-  min-height: 400px;
-}
-
-.figma-screen-embed {
-  background: #0b1324;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.figma-screen-embed-page {
-  min-height: 700px;
-}
-
-.figma-screen-frame-embedded {
-  background: #ffffff;
-  border: 0;
-  display: block;
-  height: calc(100vh - 210px);
-  min-height: 700px;
-  width: 100%;
-}
-
-.figma-screen-image-embedded {
-  display: block;
-  height: auto;
-  width: 100%;
-}
-
-.figma-screen-mobile-fallback {
-  display: none;
-  height: auto;
-  width: 100%;
-}
-
-.screen-hub-grid {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.screen-hub-card {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: #ffffff;
-  overflow: hidden;
-}
-
-.screen-hub-thumb {
-  border-bottom: 1px solid var(--line);
-  display: block;
-  height: auto;
-  width: 100%;
-}
-
-.screen-hub-meta {
-  display: grid;
-  gap: 4px;
-  padding: 14px;
-}
-
-.screen-hub-meta span {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.screen-hub-meta strong {
-  font-size: 16px;
-}
-
 @media (max-width: 920px) {
   .workspace {
     grid-template-columns: 1fr;
@@ -895,22 +794,13 @@ input[type="search"] {
     padding: 8px;
   }
 
-  .figma-screen-frame-embedded {
-    display: none;
-  }
-
-  .figma-screen-mobile-fallback {
-    display: block;
-  }
-
   .metric-grid,
   .main-grid,
   .wide-grid,
   .split-grid,
   .settings-grid,
   .workflow-board,
-  .admin-config-grid,
-  .screen-hub-grid {
+  .admin-config-grid {
     grid-template-columns: 1fr;
   }
 
@@ -943,15 +833,6 @@ input[type="search"] {
   .mobile-nav-links {
     grid-template-columns: 1fr;
     max-height: 35vh;
-  }
-
-  .figma-screen-frame-embedded,
-  .figma-screen-embed-page {
-    min-height: 420px;
-  }
-
-  .figma-screen-frame-embedded {
-    height: calc(100vh - 240px);
   }
 
   .pipeline-step,
