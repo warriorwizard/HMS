@@ -80,6 +80,36 @@ nav {
   gap: 6px;
 }
 
+.desktop-nav {
+  display: grid;
+}
+
+.mobile-nav {
+  display: none;
+}
+
+.mobile-nav summary {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+  padding: 10px 12px;
+}
+
+.mobile-nav summary::-webkit-details-marker {
+  display: none;
+}
+
+.mobile-nav[open] summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.mobile-nav-links {
+  padding-top: 8px;
+}
+
 .primary-nav a {
   border-radius: 6px;
   color: var(--muted);
@@ -786,6 +816,12 @@ input[type="search"] {
   width: 100%;
 }
 
+.figma-screen-mobile-fallback {
+  display: none;
+  height: auto;
+  width: 100%;
+}
+
 .screen-hub-grid {
   display: grid;
   gap: 16px;
@@ -829,12 +865,38 @@ input[type="search"] {
   }
 
   .sidebar {
+    gap: 16px;
     border-bottom: 1px solid var(--line);
     border-right: 0;
   }
 
-  nav {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: block;
+  }
+
+  .mobile-nav-links {
+    border: 1px solid var(--line);
+    border-top: 0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    display: grid;
+    gap: 6px;
+    grid-template-columns: 1fr 1fr;
+    max-height: 42vh;
+    overflow: auto;
+    padding: 8px;
+  }
+
+  .figma-screen-frame-embedded {
+    display: none;
+  }
+
+  .figma-screen-mobile-fallback {
+    display: block;
   }
 
   .metric-grid,
@@ -874,8 +936,9 @@ input[type="search"] {
     flex-direction: column;
   }
 
-  nav {
-    grid-template-columns: 1fr 1fr;
+  .mobile-nav-links {
+    grid-template-columns: 1fr;
+    max-height: 35vh;
   }
 
   .figma-screen-frame-embedded,

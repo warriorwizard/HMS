@@ -31,7 +31,7 @@ export function AppShell({
           <p className="eyebrow">Tarini V6</p>
           <h1>Clinical Operations</h1>
         </div>
-        <nav aria-label="Primary navigation" className="primary-nav">
+        <nav aria-label="Primary navigation" className="primary-nav desktop-nav">
           {visibleNav.map((item) => {
             const isActive = activePath === item.href;
 
@@ -42,6 +42,20 @@ export function AppShell({
             );
           })}
         </nav>
+        <details className="mobile-nav" role="navigation">
+          <summary>Open Navigation</summary>
+          <nav aria-label="Mobile navigation" className="primary-nav mobile-nav-links">
+            {visibleNav.map((item) => {
+              const isActive = activePath === item.href;
+
+              return (
+                <Link className={isActive ? "active" : ""} href={item.href} key={`mobile-${item.href}`}>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </details>
       </aside>
 
       <section className="content">

@@ -88,6 +88,16 @@ export function FigmaScreen({
         src={`${basePath}/code.html`}
         title={title}
       />
+      {layout === "embedded" ? (
+        <Image
+          alt={`${title} preview`}
+          className="figma-screen-mobile-fallback"
+          height={1080}
+          priority
+          src={`${basePath}/screen.png`}
+          width={1920}
+        />
+      ) : null}
     </main>
   );
 }
