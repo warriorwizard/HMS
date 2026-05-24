@@ -33,6 +33,10 @@ a {
   min-height: 100vh;
 }
 
+.workspace-no-sidebar {
+  grid-template-columns: 1fr;
+}
+
 .sidebar {
   display: flex;
   flex-direction: column;
